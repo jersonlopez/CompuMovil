@@ -71,20 +71,12 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     //Log.d("hola","pase por aqui");
                     db.insertWithOnConflict(ApartmentsDB.entityApartment, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
-                    //String cosulta= "select email, city from "  + ApartmentsDB.entityUser;
                     String consulta = "select " + ApartmentsDB.ColumnApartment.ubicationApartment + ", " + ApartmentsDB.ColumnApartment.priceApartment + " from " + ApartmentsDB.entityApartment;
                     Cursor cursor = db.rawQuery(consulta, null);
-                    //Toast.makeText(getApplicationContext(), cursor.getCount() + " nacimiento: " + textBorn, Toast.LENGTH_LONG).show();
-                    while (cursor.moveToNext()) {
-                        //Log.d(TAG,cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                        //Log.d(TAG,cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.city)));
+                    /*while (cursor.moveToNext()) {
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
-
-
-                        //eEmail.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                        //eCity.setText(cursor.getString(1));
-                    }
+                    }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
                     startActivity(intentNavigation);
