@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Titulo de la Aplicacion-->
+    <string name="app_name">LabsCM20172</string>
+
+    <!--Strings del navigation Drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="Apartments">Apartments</string>
+    <string name="Profile">Profile</string>
+    <string name="Settings">Settings</string>
+    <string name="Sign_off">Sign_off</string>
+    <string name="About">About</string>
+    <string name="Communicate">Communicate</string>
+
+    <!--Strings del Login-->
+    <string name="login">Login</string>
+    <string name="emailLogin">Insert email</string>
+    <string name="passwordLogin">Insert password</string>
+    <string name="logup">Logup</string>
+
+    <!--Strings del Register-->
+    <string name="editLastnameRegister">Apellido</string>
+    <string name="editNameRegister">Nombre</string>
+    <string name="elegirImagenRegister">Elegir imagen</string>
+    <string name="editAddressRegister">Ingrese dirección</string>
+    <string name="editEmailRegister">Ingrese correo</string>
+    <string name="editCityRegister">Ingrese Ciudad</string>
+    <string name="editPhoneRegister">Ingrese numero telefonico</string>
+    <string name="selectDateRegister">Elija fecha de nacimiento</string>
+    <string name="editPasswordRegister">Ingrese Contraseña</string>
+    <string name="editConfirmPasswordRegister">Confirmar contraseña</string>
+    <string name="editSaveRegister">Guardar</string>
+    <string name="manRegister">Hombre</string>
+    <string name="womanRegister">Mujer</string>
+    <string name="action_settings">action_settings</string>
+    <string name="selectImage">choose</string>
+    <!--Strings del addApartmet-->
+    <string name="addApartmentText">Add Apartment</string>
+
+    <!--Strings del about-->
+    <string name="aboutTextView">Real Estate Ensueño searches for apartments and houses for rent and shows on a single page of results. In this way, searching in a unique place, the assurance that you will find the house of your dreams, no matter how hidden. Easy, comfortable, fast.</string>
+
+</resources>

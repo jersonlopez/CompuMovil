@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">LabsCM20172</string>
+    <string name="login">Ingresar</string>
+    <string name="emailLogin">Correo Electronico</string>
+    <string name="passwordLogin">Contraseña</string>
+    <string name="logup">Registrarse</string>
+    <string name="nameLabel">Nombre:</string>
+    <string name="lastnameLabel">Apellidos:</string>
+    <string name="sexLabel">Sexo:</string>
+    <string name="bornLabel">Fecha de Nacimiento:</string>
+    <string name="addressLabel">Dirección:</string>
+    <string name="emailLabel">Correo:</string>
+    <string name="cityLabel">Ciudad:</string>
+    <string name="man">Hombre</string>
+    <string name="Woman">Mujer</string>
+    <string name="phone">Telefono:</string>
+    <string name="select">seleccione la fecha</string>
+    <string name="editLastname">Ingrese su Apellido</string>
+    <string name="editname">Ingrese su Nombre</string>
+    <string name="editemail">Ingrese su Correo</string>
+    <string name="editaddress">Direccion</string>
+    <string name="editcity">Ingrese Ciudad</string>
+    <string name="editphone">Ingrese su Telefono</string>
+    <string name="passwordregister">Contraseña:</string>
+    <string name="cpasswordregister">Confirmar:</string>
+    <string name="pass">Ingrese contraseña</string>
+    <string name="cpass">Confirme contraseña</string>
+    <string name="save">Salvar</string>
+
+</resources>
