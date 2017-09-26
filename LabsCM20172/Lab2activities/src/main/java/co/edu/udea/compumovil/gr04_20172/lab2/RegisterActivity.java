@@ -28,8 +28,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
+
+import static android.R.attr.bitmap;
+import static co.edu.udea.compumovil.gr04_20172.lab2.R.id.imageView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "TAG";
@@ -37,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ImageView myImageView;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 2;
+    static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
     //private int day, month, year;
     //ImageButton imageViewProfile;
@@ -47,12 +53,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     String textGender = "";
+    Bitmap bitmap;
+    ByteArrayOutputStream baos;
+    byte[] blob;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        myImageView = (ImageView) findViewById(R.id.img_show);
+        btn_choose_image = (Button) findViewById(R.id.btn_choose_image);
+        btn_choose_image.setOnClickListener(this);
         btnsave = (Button) findViewById(R.id.btnSave);
         eName = (EditText) findViewById(R.id.editTextNombre);
         eLastname = (EditText) findViewById(R.id.editTextApellido);
@@ -70,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
 
 
-        final String[] items = new String[]{"From Cam", "From SD Card"};
+        /*final String[] items = new String[]{"From Cam", "From SD Card"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select imagen");
@@ -92,24 +104,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     dialog.cancel();
                 } else {
                     Intent intent = new Intent();
-                    intent.setType("image/*");
+                    intent.setType("image*//*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intent, "Complete_action_using"), PICK_FROM_FILE);
                 }
             }
         });
         final AlertDialog dialog = builder.create();
-        myImageView = (ImageView) findViewById(R.id.img_show);
-        btn_choose_image = (Button) findViewById(R.id.btn_choose_image);
+
         btn_choose_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.show();
 
             }
-        });
+        });*/
     }
-
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
-    }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.N)
 
@@ -182,12 +193,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String textCPassword = ecPassword.getText().toString();
                 String textPhone = ePhone.getText().toString();
                 String textCity = eCity.getText().toString();
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
+                blob =baos.toByteArray();
 
-                if (textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
+                if (bitmap==null || textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
                 } else if (textPassword.equals(textCPassword)) {
+
                     ContentValues values = new ContentValues();
+                    values.put(ApartmentsDB.ColumnUser.photo, blob);
                     values.put(ApartmentsDB.ColumnUser.email, textEmail);
                     values.put(ApartmentsDB.ColumnUser.userName, textName);
                     values.put(ApartmentsDB.ColumnUser.userLastName, textLastname);
@@ -197,13 +213,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     values.put(ApartmentsDB.ColumnUser.numberPhone, textPhone);
                     values.put(ApartmentsDB.ColumnUser.gender, textGender);
                     values.put(ApartmentsDB.ColumnUser.city, textCity);
-                    values.put(ApartmentsDB.ColumnUser.photo, "hola");
+                    //values.put(ApartmentsDB.ColumnUser.photo, "hola");
                     //Log.d("hola","pase por aqui");
                     db.insertWithOnConflict(ApartmentsDB.entityUser, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
                     //String cosulta= "select email, city from "  + ApartmentsDB.entityUser;
-                    String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.gender + " from " + ApartmentsDB.entityUser;
+                    String consulta = "select " + ApartmentsDB.ColumnUser.photo + " from " + ApartmentsDB.entityUser;
                     Cursor cursor = db.rawQuery(consulta, null);
+                    if(cursor.getCount()>0)
+                    {
+                        Toast.makeText(getApplicationContext(),"la imagen si entro", Toast.LENGTH_SHORT).show();
+                        Log.d("Excelente", "Hay datos en el cursor");
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"la imagen no entro", Toast.LENGTH_SHORT).show();
+                        Log.d("Ups","Don bochi sin elementos");
+                    }
                     //Toast.makeText(getApplicationContext(), cursor.getCount() + " nacimiento: " + textBorn, Toast.LENGTH_LONG).show();
                     /*while (cursor.moveToNext()) {
                         //Log.d(TAG,cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
@@ -223,8 +249,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }
+                break;
 
-
+            case R.id.btn_choose_image:
+                this.selectPicture();
                 break;
         }
 
@@ -235,5 +263,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         radioButton = (RadioButton) findViewById(genderId);
         textGender = radioButton.getText().toString();
 
+    }
+
+    public void selectPicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_GET);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            // Log.d(TAG, String.valueOf(bitmap));
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+                myImageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@ package co.edu.udea.compumovil.gr04_20172.lab2;
 
 import android.provider.BaseColumns;
 
+import java.sql.Blob;
+
 /**
  * Created by jerson.lopez on 20/09/17.
  */
@@ -29,7 +31,6 @@ public class ApartmentsDB {
 
     public class ColumnApartment { //Columnas de la tabla Apartment
         public static final String ubicationApartment = BaseColumns._ID; // dirección primary key
-        public static final String photoApartment  = "photoApartment";
         public static final String typeApartment = "typeApartment";
         public static final String priceApartment = "priceApartment";
         public static final String areaApartment = "areaApartment";

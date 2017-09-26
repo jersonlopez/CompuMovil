@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
+import android.widget.Toast;
 
 
 /**
@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //Tabla user
 
         String sqlUser = String
-                .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s text)",
+                .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s blob)",
                         ApartmentsDB.entityUser,
                         ApartmentsDB.ColumnUser.email,
                         ApartmentsDB.ColumnUser.userName,
@@ -47,10 +47,9 @@ public class DbHelper extends SQLiteOpenHelper {
         //Tabla de Apartment
 
         String sqlApartment = String
-                .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text, %s text)",
+                .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text)",
                         ApartmentsDB.entityApartment,
                         ApartmentsDB.ColumnApartment.ubicationApartment,
-                        ApartmentsDB.ColumnApartment.photoApartment,
                         ApartmentsDB.ColumnApartment.typeApartment,
                         ApartmentsDB.ColumnApartment.priceApartment,
                         ApartmentsDB.ColumnApartment.areaApartment,
@@ -65,10 +64,11 @@ public class DbHelper extends SQLiteOpenHelper {
         //Tabala Resource
 
         String sqlResource = String
-                .format("create table %s (%s text primary key, %s text)",
+                .format("create table %s (%s text primary key, %s blob, FOREIGN KEY (%s) REFERENCES %s(%s))",
                         ApartmentsDB.entityResource,
                         ApartmentsDB.ColumnResource.ubicationApartment,
-                        ApartmentsDB.ColumnResource.photo
+                        ApartmentsDB.ColumnResource.photo,
+                        ApartmentsDB.ColumnResource.ubicationApartment, ApartmentsDB.entityApartment, ApartmentsDB.ColumnApartment.ubicationApartment
                 );
         //Sentencia para crear tabla
         Log.d(TAG, "onCreate with SQL: " + sqlResource);

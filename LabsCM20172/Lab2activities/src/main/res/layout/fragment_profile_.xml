@@ -13,16 +13,17 @@
 
         <ImageView
             android:id="@+id/imageViewProfile"
-            android:layout_width="141dp"
-            android:layout_height="172dp"
-            app:srcCompat="@drawable/ic_menu_profile"
+            android:layout_width="170dp"
+            android:layout_height="136dp"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="0.502" />
+            app:layout_constraintHorizontal_bias="0.502"
+            tools:layout_editor_absoluteX="59dp" />
 
         <TextView
             android:id="@+id/textViewNameProfile"

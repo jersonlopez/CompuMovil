@@ -1,5 +1,7 @@
 package co.edu.udea.compumovil.gr04_20172.lab2;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,25 +15,19 @@ public class Apartment {
     String value;
     String area;
     String description;
-    int photoId;
+    String ubication;
+    byte[] photo;
 
 
-    Apartment(int in1, String type, String value, String area, String description) {
-        this.photoId = in1;
+    Apartment(byte[] photo, String type, String value, String area, String description, String ubication) {
+        this.photo = photo;
         this.type = type;
-        this.value= value;
-        this.area=area;
-        this.description=description;
+        this.value = value;
+        this.area = area;
+        this.description = description;
+        this.ubication = ubication;
 
     }
-
-    /*public byte[] getFoto() {
-        return foto;
-    }
-
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }*/
 
     public String getType() {
         return type;
@@ -63,6 +59,22 @@ public class Apartment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getUbitacion() {
+        return ubication;
+    }
+
+    public void setUbication(String ubication) {
+        this.type = ubication;
     }
 }
 
