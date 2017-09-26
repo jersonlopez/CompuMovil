@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.edu.udea.compumovil.gr04_20172.lab1.Register_Activity">
+
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/startingView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="co.edu.udea.compumovil.gr04_20172.lab1.Starting_Activity">
+
+            <ImageButton
+                android:id="@+id/imageViewProfile"
+                android:layout_width="104dp"
+                android:layout_height="89dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <EditText
+                android:id="@+id/editTextApellido"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:hint="@string/editLastname"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintLeft_toRightOf="@+id/apellidoLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextNombre"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="0dp" />
+
+            <EditText
+                android:id="@+id/editTextNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="113dp"
+                android:hint="@string/editname"
+                android:textSize="19sp"
+                app:layout_constraintHorizontal_bias="0.538"
+                app:layout_constraintLeft_toRightOf="@+id/nombreLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/nombreLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="21dp"
+                android:text="@string/nameLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
+                android:layout_marginStart="21dp" />
+
+            <TextView
+                android:id="@+id/apellidoLabel"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="18dp"
+                android:text="@string/lastnameLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nombreLabel"
+                android:layout_marginStart="21dp" />
+
+            <TextView
+                android:id="@+id/sexLabel"
+                android:layout_width="0dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/sexLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/apellidoLabel"
+                app:layout_goneMarginStart="21dp"
+                android:layout_marginStart="21dp" />
+
+            <TextView
+                android:id="@+id/bornLabel"
+                android:layout_width="0dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="21dp"
+                android:text="@string/bornLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sexLabel" />
+
+            <TextView
+                android:id="@+id/addressLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/addressLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bornLabel" />
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/emailLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addressLabel" />
+
+            <TextView
+                android:id="@+id/cityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:text="@string/cityLabel"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="28dp"
+                app:layout_constraintTop_toBottomOf="@+id/labelPhone" />
+
+
+            <TextView
+                android:id="@+id/labelPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:text="@string/phone"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                android:layout_marginTop="35dp"
+                app:layout_constraintTop_toBottomOf="@+id/cPasswordLabel"
+                android:layout_marginLeft="21dp"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <EditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="14dp"
+                android:hint="@string/editaddress"
+                android:textSize="19sp"
+                app:layout_constraintHorizontal_bias="0.412"
+                app:layout_constraintLeft_toRightOf="@+id/addressLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bornLabel"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="52dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="52dp"
+                android:layout_marginTop="7dp"
+                android:inputType="textEmailAddress"
+                android:hint="@string/editemail"
+                android:textSize="19sp"
+                app:layout_constraintHorizontal_bias="0.164"
+                app:layout_constraintLeft_toRightOf="@+id/emailLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextAddress"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:hint="@string/editcity"
+                android:textSize="19sp"
+                app:layout_constraintHorizontal_bias="0.428"
+                app:layout_constraintLeft_toRightOf="@+id/cityLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginLeft="8dp"
+                android:hint="@string/editphone"
+                android:textSize="19sp"
+                app:layout_constraintLeft_toRightOf="@+id/labelPhone"
+                android:layout_marginStart="49dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextCpassword"
+                app:layout_constraintHorizontal_bias="0.0" />
+
+            <TextView
+                android:id="@+id/editTextDate"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:ems="10"
+                android:text="@string/select"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_bias="0.383"
+                app:layout_constraintLeft_toRightOf="@+id/bornLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/RadioGroup"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp" />
+
+            <RadioGroup
+                android:id="@+id/RadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="0dp"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                app:layout_constraintLeft_toRightOf="@+id/sexLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextApellido"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintHorizontal_bias="0.49">
+
+                <RadioButton
+                    android:id="@+id/radioButtonMan"
+                    android:layout_width="83dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="29dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/man" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonWoman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="0.54"
+                    android:text="@string/Woman" />
+
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/passwordLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                android:text="@string/passwordregister"
+                android:layout_marginLeft="21dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@+id/emailLabel"
+                android:layout_marginStart="21dp" />
+
+            <TextView
+                android:id="@+id/cPasswordLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:textStyle="bold|italic"
+                android:text="@string/cpasswordregister"
+                android:layout_marginTop="29dp"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLabel"
+                android:layout_marginLeft="21dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="21dp" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:hint="@string/pass"
+                app:layout_constraintLeft_toRightOf="@+id/passwordLabel"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_marginTop="13dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextCpassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:hint="@string/cpass"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/cPasswordLabel"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnsave"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/save"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextCity" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+
+
+</android.support.v4.widget.NestedScrollView>

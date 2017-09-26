@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LabsCM20172</string>
+    <string name="login">Login</string>
+    <string name="emailLogin">Email</string>
+    <string name="passwordLogin">Password</string>
+    <string name="logup">Log up</string>
+    <string name="nameLabel">Name:</string>
+    <string name="lastnameLabel">Lastname:</string>
+    <string name="sexLabel">Sex:</string>
+    <string name="bornLabel">Born:</string>
+    <string name="addressLabel">Address:</string>
+    <string name="emailLabel">Email:</string>
+    <string name="cityLabel">City:</string>
+    <string name="man">Man</string>
+    <string name="Woman">Woman</string>
+    <string name="phone">Telefono:</string>
+    <string name="select">select Date</string>
+    <string name="editname">Insert Name</string>
+    <string name="editLastname">Insert lastname</string>
+    <string name="editemail">Insert email</string>
+    <string name="editaddress">Insert address</string>
+    <string name="editcity">City</string>
+    <string name="editphone">Phone number</string>
+    <string name="passwordregister">Password:</string>
+    <string name="cpasswordregister">Cofirm:</string>
+    <string name="pass">Insert password</string>
+    <string name="cpass">Confirm password</string>
+    <string name="save">Salvar</string>
+</resources>

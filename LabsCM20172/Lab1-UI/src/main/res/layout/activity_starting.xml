@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/startingView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.edu.udea.compumovil.gr04_20172.lab1.Starting_Activity">
+
+
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="104dp"
+        android:layout_height="89dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/textViewApellido"
+        android:layout_width="171dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="62dp"
+        android:layout_marginTop="19dp"
+        android:text="soy el apellido"
+        android:textSize="19sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNombre"
+        android:layout_marginEnd="62dp"
+        app:layout_constraintLeft_toRightOf="@+id/apellidoLabel"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.448" />
+
+    <TextView
+        android:id="@+id/textViewNombre"
+        android:layout_width="171dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="161dp"
+        android:text="soy el nombre"
+        android:textSize="19sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintLeft_toRightOf="@+id/nombreLabel"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.476" />
+
+    <TextView
+        android:id="@+id/nombreLabel"
+        android:layout_width="72dp"
+        android:layout_height="25dp"
+        android:text="@string/nameLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/apellidoLabel"
+        android:layout_width="84dp"
+        android:layout_height="25dp"
+        android:text="@string/lastnameLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/nombreLabel"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/sexLabel"
+        android:layout_width="47dp"
+        android:layout_height="23dp"
+        android:text="@string/sexLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@+id/apellidoLabel"
+        app:layout_goneMarginStart="15dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/bornLabel"
+        android:layout_width="181dp"
+        android:layout_height="23dp"
+        android:text="@string/bornLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/sexLabel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/addressLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginLeft="30dp"
+        android:text="@string/addressLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/bornLabel"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/emailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginLeft="45dp"
+        android:text="@string/emailLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="19dp"
+        app:layout_constraintTop_toBottomOf="@+id/addressLabel"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/cityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginLeft="45dp"
+        android:text="@string/cityLabel"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="19dp"
+        app:layout_constraintTop_toBottomOf="@+id/emailLabel"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/labelPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="19dp"
+        android:text="@string/phone"
+        android:textSize="19sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityLabel"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:text="Dirección"
+        android:textSize="19sp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/bornLabel"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/addressLabel"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.087" />
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginTop="19dp"
+        android:text="Correo"
+        android:textSize="19sp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddress"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/emailLabel"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.163" />
+
+    <TextView
+        android:id="@+id/textViewCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="19dp"
+        android:text="Ciudad"
+        android:textSize="19sp"
+        app:layout_constraintLeft_toRightOf="@+id/cityLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.157" />
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="telefono"
+        android:textSize="19sp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCity"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/labelPhone"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.1" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:hint="@string/select"
+        android:textSize="19sp"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintLeft_toRightOf="@+id/bornLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RadioGroup" />
+
+    <RadioGroup
+        android:id="@+id/RadioGroup"
+        android:layout_width="240dp"
+        android:layout_height="39dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintHorizontal_bias="0.408"
+        app:layout_constraintLeft_toRightOf="@+id/sexLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewApellido">
+
+        <RadioButton
+            android:id="@+id/radioButtonMan"
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="29dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/man" />
+
+        <RadioButton
+            android:id="@+id/radioButtonWoman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.54"
+            android:text="@string/Woman" />
+
+
+    </RadioGroup>
+
+</android.support.constraint.ConstraintLayout>
