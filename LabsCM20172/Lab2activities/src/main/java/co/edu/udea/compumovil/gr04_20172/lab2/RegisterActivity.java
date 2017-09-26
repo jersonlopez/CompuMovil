@@ -222,12 +222,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Cursor cursor = db.rawQuery(consulta, null);
                     if(cursor.getCount()>0)
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen si entro", Toast.LENGTH_SHORT).show();
-                        Log.d("Excelente", "Hay datos en el cursor");
+                        //Toast.makeText(getApplicationContext(),"la imagen si se guardo", Toast.LENGTH_SHORT).show();
+                        //Log.d("Excelente", "Hay datos en el cursor");
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen no entro", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"la imagen no se guardo", Toast.LENGTH_SHORT).show();
                         Log.d("Ups","Don bochi sin elementos");
                     }
                     //Toast.makeText(getApplicationContext(), cursor.getCount() + " nacimiento: " + textBorn, Toast.LENGTH_LONG).show();

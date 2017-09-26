@@ -68,7 +68,6 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                 String textShort = eShortDescription.getText().toString();
                 String textLarge = eLargeDescription.getText().toString();
                 String texUbication = eUbication.getText().toString();
-                Toast.makeText(getApplicationContext(),"estoy agregando",Toast.LENGTH_SHORT).show();
 
                 if (bitmap==null || textType.equals("") || textPrice.equals("") || textArea.equals("") || textRooms.equals("") || textShort.equals("") || textLarge.equals("") || texUbication.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
@@ -105,12 +104,12 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     Cursor cursor1 = db.rawQuery(consulta1, null);
                     if(cursor1.getCount()>0)
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen si entro", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
                         Log.d("Excelente", "Hay datos en el cursor");
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen no entro", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "la imagen no entro", Toast.LENGTH_SHORT).show();
                         Log.d("Ups","Don bochi sin elementos");
                     }
                     /*while (cursor.moveToNext()) {
@@ -118,9 +117,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
                     }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
-                    //Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
-                    //startActivity(intentNavigation);
-                    //finish();
+                    Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
+                    startActivity(intentNavigation);
+                    finish();
                 }
                 break;
 

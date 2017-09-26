@@ -6,23 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dairo.garcia on 21/09/17.
+ * Created by jerson.lopez on 21/09/17.
  */
 
 public class Apartment {
     //int photoId;
     String type;
-    String value;
+    String price;
     String area;
     String description;
     String ubication;
-    byte[] photo;
+   // byte[] photo;
 
 
-    Apartment(byte[] photo, String type, String value, String area, String description, String ubication) {
-        this.photo = photo;
+    Apartment(/*byte[] photo,*/ String type, String price, String area, String description, String ubication) {
+        //this.photo = photo;
         this.type = type;
-        this.value = value;
+        this.price = price;
         this.area = area;
         this.description = description;
         this.ubication = ubication;
@@ -38,11 +38,11 @@ public class Apartment {
     }
 
     public String getPrice() {
-        return value;
+        return price;
     }
 
     public void setPrice(String price) {
-        this.value = price;
+        this.price = price;
     }
 
     public String getArea() {
@@ -61,13 +61,13 @@ public class Apartment {
         this.description = description;
     }
 
-    public byte[] getPhoto() {
+    /*public byte[] getPhoto() {
         return photo;
     }
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
-    }
+    }*/
 
     public String getUbitacion() {
         return ubication;

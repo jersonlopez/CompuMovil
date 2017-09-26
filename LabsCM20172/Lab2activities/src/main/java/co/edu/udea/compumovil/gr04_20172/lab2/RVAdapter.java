@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dairo.garcia on 21/09/17.
+ * Created by jerson.lopez on 21/09/17.
  */
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolder> implements View.OnClickListener{
@@ -33,13 +33,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
     @Override
     public void onBindViewHolder(ApartmentViewHolder holder, int position) {
         //holder.apartmentPhoto.setImageResource(apartments.get(position).photoId);
+        /*holder.apartmentType.setText("casa linda");
+        holder.apartmentValue.setText("1'200.000");
+        holder.apartmentArea.setText("150 m2");*
+        holder.apartmentDescriptionShort.setText("casa grande, bien ubicada...");*/
+        holder.photov.setImageResource(R.drawable.ic_menu_signoff);
         holder.apartmentType.setText(apartments.get(position).getType());
         holder.apartmentValue.setText(apartments.get(position).getPrice());
         holder.apartmentArea.setText(apartments.get(position).getArea());
         holder.apartmentDescriptionShort.setText(apartments.get(position).getDescription());
-        byte[] blob = apartments.get(position).getPhoto();
+        /*byte[] blob = apartments.get(position).getPhoto();
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-        holder.photov.setImageBitmap(bitmap);
+        holder.photov.setImageBitmap(bitmap);*/
     }
 
 

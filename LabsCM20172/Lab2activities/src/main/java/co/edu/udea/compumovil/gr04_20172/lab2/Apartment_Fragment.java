@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     RecyclerView.LayoutManager llm;
     DbHelper dbHelper;
     SQLiteDatabase db;
+    byte[] blob;
+    Bitmap bitmap;
+    ImageView photo;
 
 
     public Apartment_Fragment() {
@@ -57,12 +61,9 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         apartments = new ArrayList<>();
         //apartments.add(new Apartment(R.drawable.in1, "Finca", "90.000.000", "70 m2", "Es una casa bonita, estilo colonial"));
         //apartments.add(new Apartment(R.drawable.ic_menu_profile, "Segundo piso", "100.000.000", "90 m2", "Es una casa grande, estilo colonial"));
-        //apartments.add(new Apartment(R.drawable.ic_menu_signoff, "Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial"));
 
         String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
-
-
 
         while (cursor.moveToNext()) {
             //Toast.makeText(getActivity(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment)), Toast.LENGTH_LONG).show();
@@ -71,12 +72,27 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             String textArea = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment));
             String textShort = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ShortDescriptionApartment));
             String textubication = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
-            String consulta1 = "select * from " + ApartmentsDB.entityResource+ " where " + ApartmentsDB.ColumnResource.ubicationApartment+ "="+ "\"" + textubication + "\"" ;
+
+            String consulta1 = "select * from " + ApartmentsDB.entityResource+" where "+ApartmentsDB.ColumnResource.ubicationApartment + "="+ "\"" +
+                    textubication.toString()+ "\"" ;
+            Cursor cursor1 = db.rawQuery(consulta1, null);
+            if(cursor1.moveToNext())
+            {
+                blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
+                bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
+                apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
+                //photo.setImageBitmap(bitmap);
+
+                Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
+            }
+            /*String consulta1 = "select " + ApartmentsDB.ColumnResource.photo + " from " + ApartmentsDB.entityResource + " where " + ApartmentsDB.ColumnResource.ubicationApartment+ "="+ "\"" + textubication + "\"" ;
             Cursor cursor1 = db.rawQuery(consulta1, null);
             byte[] blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
             //Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-            //photo.setImageBitmap(bitmap);
-            apartments.add(new Apartment(blob, textType, textPrice, textArea, textShort, textubication));
+            //photo.setImageBitmap(bitmap)*/
+            apartments.add(new Apartment(textType, textPrice, textArea, textShort, textubication));
 
         }
         RVAdapter adapter = new RVAdapter(apartments);
