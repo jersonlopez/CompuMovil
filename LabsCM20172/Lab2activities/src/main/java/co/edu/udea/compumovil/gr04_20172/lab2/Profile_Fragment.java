@@ -79,7 +79,7 @@ public class Profile_Fragment extends Fragment {
         //Bitmap bmp = BitmapFactory.decodeByteArray(pByte, 0, pByte.length);
         bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
         photo.setImageBitmap(bitmap);
-        Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
         return v;
     }
 

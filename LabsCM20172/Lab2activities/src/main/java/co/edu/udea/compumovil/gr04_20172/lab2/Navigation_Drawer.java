@@ -32,6 +32,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
     Fragment fragment=null;
     Boolean fragmentChoose=false;
+    FragmentTransaction transaction = getFragmentManager().beginTransaction();
     TextView tName, tEmail;
 
 
@@ -112,10 +113,13 @@ public class Navigation_Drawer extends AppCompatActivity
         } else if (id == R.id.itemProfile) {
             fragment=new Profile_Fragment();
             fragmentChoose=true;
+            //transaction.addToBackStack(null);
+            //transaction.commit();
 
         } else if (id == R.id.itemSetting) {
             fragment =new SettingsScreen();
             fragmentChoose=true;
+
 
         } else if (id == R.id.itemSign_off) {
             Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class);
@@ -151,4 +155,18 @@ public class Navigation_Drawer extends AppCompatActivity
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onFragmentClickButton1(String id) {
+        fragment=new ApartmentDetailFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("id",id);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contentNavigation,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }

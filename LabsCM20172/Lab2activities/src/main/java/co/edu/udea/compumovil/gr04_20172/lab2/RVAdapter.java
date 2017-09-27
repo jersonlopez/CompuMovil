@@ -37,14 +37,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         holder.apartmentValue.setText("1'200.000");
         holder.apartmentArea.setText("150 m2");*
         holder.apartmentDescriptionShort.setText("casa grande, bien ubicada...");*/
-        holder.photov.setImageResource(R.drawable.ic_menu_signoff);
+        //holder.photov.setImageResource(R.drawable.ic_menu_signoff);
         holder.apartmentType.setText(apartments.get(position).getType());
         holder.apartmentValue.setText(apartments.get(position).getPrice());
         holder.apartmentArea.setText(apartments.get(position).getArea());
         holder.apartmentDescriptionShort.setText(apartments.get(position).getDescription());
+        holder.photov.setImageBitmap(apartments.get(position).getPhoto());
         /*byte[] blob = apartments.get(position).getPhoto();
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-        holder.photov.setImageBitmap(bitmap);*/
+        */
     }
 
 
@@ -76,6 +77,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
 
     }
 
+    public Apartment getItem(int position)
+    {
+        return apartments.get(position);
+
+    }
+
+
 
     public class ApartmentViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -85,7 +93,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         TextView apartmentDescriptionShort;
         ImageView photov;
 
-        ApartmentViewHolder(View itemView) {
+        public ApartmentViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             apartmentType = (TextView)itemView.findViewById(R.id.apartment_type);
@@ -105,6 +113,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         apartments.add(apartment);
         this.notifyDataSetChanged();
     }
+
+
 
 
 }

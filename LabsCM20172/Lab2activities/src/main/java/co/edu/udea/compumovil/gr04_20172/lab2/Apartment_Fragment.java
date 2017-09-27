@@ -1,6 +1,7 @@
 package co.edu.udea.compumovil.gr04_20172.lab2;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -28,11 +29,12 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     //private RecyclerView.LayoutManager llm;
     RecyclerView rv;
     RecyclerView.LayoutManager llm;
+    private RVAdapter adapter;
     DbHelper dbHelper;
     SQLiteDatabase db;
     byte[] blob;
     Bitmap bitmap;
-    ImageView photo;
+    private OnFragmentButtonListener mListener;
 
 
     public Apartment_Fragment() {
@@ -80,10 +82,10 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             {
                 blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
                 bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-                apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
+                apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication));
+                //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
                 //photo.setImageBitmap(bitmap);
-
-                Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
             }
@@ -92,13 +94,42 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             byte[] blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
             //Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
             //photo.setImageBitmap(bitmap)*/
-            apartments.add(new Apartment(textType, textPrice, textArea, textShort, textubication));
+
 
         }
-        RVAdapter adapter = new RVAdapter(apartments);
+        adapter = new RVAdapter(apartments);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String id = adapter.getItem(rv.getChildAdapterPosition(view)).getUbitacion();
+                if(mListener!=null)
+                {
+                    mListener.onFragmentClickButton(id);
+                }
+            }
+        });
         rv.setAdapter(adapter);
         return v;
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof OnFragmentButtonListener)
+        {
+            mListener = (OnFragmentButtonListener) context;
+        }
+        else{
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentButtonListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -111,6 +142,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         void onFragmentClickButton(int id);
     }
 
-    private class TAG {
+    public interface OnFragmentButtonListener{
+        void onFragmentClickButton(String id);
     }
 }
