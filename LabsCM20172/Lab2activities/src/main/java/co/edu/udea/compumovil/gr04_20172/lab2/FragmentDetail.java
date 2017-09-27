@@ -44,7 +44,7 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         Bundle bundle = getArguments();
         int id = bundle.getInt("id");
         Log.d("Alerta",String.valueOf(id));
-        String consulta="select * from "+ ApartmentsDB.entityResource + " where Apartment." + ApartmentsDB.ColumnResource.ID +"="+ id;
+        String consulta="select * from "+ ApartmentsDB.entityResource + " where Apartment." + ApartmentsDB.ColumnResource.id +"="+ id;
         DbHelper dbHelper=new DbHelper(getActivity());
         db=dbHelper.getWritableDatabase();
         cursor= db.rawQuery(consulta,null);

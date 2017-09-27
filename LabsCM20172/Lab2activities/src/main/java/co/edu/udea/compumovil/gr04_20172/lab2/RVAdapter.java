@@ -1,5 +1,6 @@
 package co.edu.udea.compumovil.gr04_20172.lab2;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
@@ -8,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 /**
  * Created by jerson.lopez on 21/09/17.
@@ -71,7 +75,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
 
     @Override
     public void onClick(View view) {
-        if (view != null){
+        if (listener != null){
             listener.onClick(view);
         }
 
@@ -92,9 +96,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         TextView apartmentArea;
         TextView apartmentDescriptionShort;
         ImageView photov;
+        LinearLayout ly;
 
         public ApartmentViewHolder(View itemView) {
             super(itemView);
+            ly = (LinearLayout) itemView.findViewById(R.id.layout);
+            ly.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent detail = new Intent(ly.getContext(), FragmentDetail.class);
+                    startActivity(ly.getContext(),detail,null);
+
+
+                }
+            });
             cv = (CardView)itemView.findViewById(R.id.cv);
             apartmentType = (TextView)itemView.findViewById(R.id.apartment_type);
             apartmentValue = (TextView)itemView.findViewById(R.id.apartment_value);

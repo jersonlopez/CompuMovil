@@ -31,6 +31,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
     Fragment fragment=null;
     Boolean fragmentChoose=false;
+    String email;
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
     TextView tName, tEmail;
 
@@ -40,6 +41,7 @@ public class Navigation_Drawer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation__drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        email = getIntent().getStringExtra(email);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //tName = (TextView) findViewById(R.id.nam)
@@ -49,6 +51,7 @@ public class Navigation_Drawer extends AppCompatActivity
                 Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intentToAdd = new Intent(Navigation_Drawer.this, Add_Apartment_Activity.class);
+                intentToAdd.putExtra("email",email);
                 startActivity(intentToAdd);
             }
         });

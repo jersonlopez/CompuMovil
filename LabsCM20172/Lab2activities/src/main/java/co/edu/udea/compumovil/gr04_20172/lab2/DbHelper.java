@@ -66,7 +66,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String sqlResource = String
                 .format("create table %s (%s integer primary key AUTOINCREMENT not null, %s text, %s blob, FOREIGN KEY (%s) REFERENCES %s(%s))",
                         ApartmentsDB.entityResource,
-                        ApartmentsDB.ColumnResource.ID,
+                        ApartmentsDB.ColumnResource.id,
                         ApartmentsDB.ColumnResource.ubicationApartment,
                         ApartmentsDB.ColumnResource.photo,
                         ApartmentsDB.ColumnResource.ubicationApartment, ApartmentsDB.entityApartment, ApartmentsDB.ColumnApartment.ubicationApartment

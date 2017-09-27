@@ -28,6 +28,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     DbHelper dbHelper;
     SQLiteDatabase db;
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
+    String email;
     Button btnAdd;
     ImageView imageView;
     static final int REQUEST_IMAGE_GET = 101;
@@ -38,6 +39,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        email = getIntent().getStringExtra("email");
         setContentView(R.layout.activity_add__apartment);
         imageView = (ImageView) findViewById(R.id.imageButton);
         imageView.setOnClickListener(this);
@@ -117,9 +119,10 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
                     }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
-                    //Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
-                    //startActivity(intentNavigation);
-                    //finish();
+                    Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
+                    intentNavigation.putExtra("email",email);
+                    startActivity(intentNavigation);
+                    finish();
                 }
                 break;
 

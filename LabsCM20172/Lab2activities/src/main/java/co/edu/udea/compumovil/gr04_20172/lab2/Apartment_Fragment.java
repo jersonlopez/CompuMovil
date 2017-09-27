@@ -51,8 +51,8 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
-        String email = getActivity().getIntent().getStringExtra("email").toString();
-        Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
+        //String email = getActivity().getIntent().getStringExtra("email").toString();
+        //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
         //Log.d("Estoy en el fragment",email);
     }
 
@@ -81,13 +81,13 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             if(cursor1.moveToNext())
             {
                 blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
-                id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.ID));
+                id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.id));
                 bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
                 apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
                 //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
                 //photo.setImageBitmap(bitmap);
                 //Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(),id, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"cogi el id", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
             }
