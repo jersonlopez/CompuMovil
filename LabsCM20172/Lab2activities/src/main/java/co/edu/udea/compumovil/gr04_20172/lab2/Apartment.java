@@ -16,11 +16,11 @@ public class Apartment {
     String area;
     String description;
     String ubication;
-   // byte[] photo;
     Bitmap photo;
+    int id;
 
 
-    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication) {
+    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
         this.photo = photo;
         this.type = type;
         this.price = price;
@@ -76,6 +76,14 @@ public class Apartment {
 
     public void setUbication(String ubication) {
         this.type = ubication;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 

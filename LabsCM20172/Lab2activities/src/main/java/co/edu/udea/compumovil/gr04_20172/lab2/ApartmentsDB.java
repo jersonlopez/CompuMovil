@@ -40,7 +40,8 @@ public class ApartmentsDB {
     }
 
     public class ColumnResource {
+        public static final String ID = BaseColumns._ID;
         public static final String photo = "photo";
-        public static final String ubicationApartment = BaseColumns._ID;
+        public static final String ubicationApartment = "ubication";
     }
 }

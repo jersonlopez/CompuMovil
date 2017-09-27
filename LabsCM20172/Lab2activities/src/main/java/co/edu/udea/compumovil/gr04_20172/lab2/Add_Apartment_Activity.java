@@ -117,9 +117,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
                     }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
-                    Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
-                    startActivity(intentNavigation);
-                    finish();
+                    //Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
+                    //startActivity(intentNavigation);
+                    //finish();
                 }
                 break;
 

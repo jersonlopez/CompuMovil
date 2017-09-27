@@ -41,6 +41,8 @@
     <!--Strings del about-->
     <string name="aboutTextView">Inmobiliaria Ensueño busca apartamentos y casas en renta y te los muestra en una única página de resultados. De esta manera, buscando en un único lugar, te aseguras de que encontrarás la casa de tus sueños, por muy escondida que esté. Fácil, cómodo, rápido.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

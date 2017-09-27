@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Navigation_Drawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Apartment_Fragment.OnFragmentInteractionListener
-        ,Profile_Fragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, Apartment_Fragment.OnFragmentButtonListener{
 
     Fragment fragment=null;
     Boolean fragmentChoose=false;
@@ -145,7 +144,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
     @Override
     public void onFragmentClickButton(int id) {
-        fragment=new ApartmentDetailFragment();
+        fragment=new FragmentDetail();
         Bundle bundle=new Bundle();
         bundle.putInt("id",id);
         fragment.setArguments(bundle);
@@ -156,17 +155,6 @@ public class Navigation_Drawer extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onFragmentClickButton1(String id) {
-        fragment=new ApartmentDetailFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("id",id);
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contentNavigation,fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+
 
 }
