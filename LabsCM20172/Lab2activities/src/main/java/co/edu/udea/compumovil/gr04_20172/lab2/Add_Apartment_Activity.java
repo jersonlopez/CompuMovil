@@ -104,13 +104,13 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     Cursor cursor1 = db.rawQuery(consulta1, null);
                     if(cursor1.getCount()>0)
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
                         Log.d("Excelente", "Hay datos en el cursor");
                     }
                     else
                     {
                         Toast.makeText(getApplicationContext(), "la imagen no entro", Toast.LENGTH_SHORT).show();
-                        Log.d("Ups","Don bochi sin elementos");
+                        //Log.d("Ups","Don bochi sin elementos");
                     }
                     /*while (cursor.moveToNext()) {
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();

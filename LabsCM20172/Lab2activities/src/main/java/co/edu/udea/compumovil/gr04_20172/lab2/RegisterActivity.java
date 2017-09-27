@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     String textGender = "";
+    String textImage = "";
     Bitmap bitmap;
     ByteArrayOutputStream baos;
     byte[] blob;
@@ -193,14 +194,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String textCPassword = ecPassword.getText().toString();
                 String textPhone = ePhone.getText().toString();
                 String textCity = eCity.getText().toString();
-                baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
-                blob =baos.toByteArray();
 
-                if (bitmap==null || textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
+                if (bitmap == null ||textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
                 } else if (textPassword.equals(textCPassword)) {
+                    baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
+                    blob = baos.toByteArray();
 
                     ContentValues values = new ContentValues();
                     values.put(ApartmentsDB.ColumnUser.photo, blob);
@@ -284,6 +285,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
                 myImageView.setImageBitmap(bitmap);
+                textImage = "tengo foto";
             } catch (IOException e) {
                 e.printStackTrace();
             }
