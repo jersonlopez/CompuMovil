@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 
@@ -28,6 +29,7 @@ import java.io.ByteArrayInputStream;
 public class FragmentDetail extends Fragment implements View.OnClickListener {
     private CollapsingToolbarLayout toolbar;
     SQLiteDatabase db;
+    DbHelper dbHelper;
     Cursor cursor,cursor2,cursor3;
     TextView name, type, room, cost,area,ubication,description;
     ImageView image;
@@ -43,16 +45,23 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         int id = bundle.getInt("id");
+        String id1 = String.valueOf(id);
         Log.d("Alerta",String.valueOf(id));
-        String consulta="select * from "+ ApartmentsDB.entityResource + " where Apartment." + ApartmentsDB.ColumnResource.id +"="+ id;
-        DbHelper dbHelper=new DbHelper(getActivity());
+        String consulta="select * from "+ ApartmentsDB.entityResource + " where Resource." + ApartmentsDB.ColumnResource.id +"="+id;
+        dbHelper=new DbHelper(getActivity());
         db=dbHelper.getWritableDatabase();
         cursor= db.rawQuery(consulta,null);
-        String textubication1 = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnResource.ubicationApartment));
 
-        String consulta3 = "select * from " + ApartmentsDB.entityApartment+" where "+ApartmentsDB.ColumnApartment.ubicationApartment + "="+ "\"" +
-                textubication1.toString()+ "\"" ;
-        cursor3= db.rawQuery(consulta3,null);
+        if(cursor.moveToNext()) {
+            cursor.moveToFirst();
+            String textubication1 = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnResource.ubicationApartment));
+        }else{
+            Toast.makeText(getActivity(),"no traje nada", Toast.LENGTH_SHORT).show();
+        }
+
+        //String consulta3 = "select * from " + ApartmentsDB.entityApartment+" where "+ApartmentsDB.ColumnApartment.ubicationApartment + "="+ "\"" +
+                //textubication1 + "\"" ;
+        //cursor3= db.rawQuery(consulta3,null);
     }
 
 
@@ -75,7 +84,7 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         map = v.findViewById(R.id.map_button);
         map.setOnClickListener(this);
 
-        if(cursor3.moveToNext()){
+        /*if(cursor3.moveToNext()){
             cursor3.moveToFirst();
            // String consulta2="select photo from Resource where Resource." +ApartmentsDB.ColumnResource.apartment+"=" +cursor.getInt(0);
             //cursor2=db.rawQuery(consulta2,null);
@@ -98,7 +107,7 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
             area.setText(textArea);
             ubication.setText(textubication);
             description.setText(textLarge);
-        }
+        }*/
 
         /*String consulta="select * from "+ ApartmentDB.table_apartment + " where Apartment.ID= " + id;
         ApartmentHelper dbHelper=new ApartmentHelper(getActivity());
