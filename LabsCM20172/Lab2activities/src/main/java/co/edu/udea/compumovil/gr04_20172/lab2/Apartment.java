@@ -27,6 +27,7 @@ public class Apartment {
         this.area = area;
         this.description = description;
         this.ubication = ubication;
+        this.id = id;
 
     }
 

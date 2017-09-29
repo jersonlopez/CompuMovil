@@ -81,6 +81,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.id));
                 bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
                 apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                 //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
                 //photo.setImageBitmap(bitmap);
                 //Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
@@ -98,6 +99,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 int id = adapter.getItem(rv.getChildAdapterPosition(view)).getId();
+                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                 if(mListener!=null)
                 {
                     mListener.onFragmentClickButton(id);

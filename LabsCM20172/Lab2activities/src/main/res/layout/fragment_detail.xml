@@ -30,7 +30,7 @@
                 android:src="@drawable/logo"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
-                android:layout_height="215dp"
+                android:layout_height="match_parent"
                 android:layout_width="match_parent"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolBar"
@@ -65,7 +65,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tipo"
+                    android:text="Tipo:"
                     android:gravity="center"
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"/>
@@ -74,13 +74,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Precio"
+                    android:text="Precio:"
                     android:gravity="center"
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"/>
@@ -89,13 +90,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Habitaciones"
+                    android:text="Habitaciones:"
                     android:gravity="center"
                     android:textStyle="bold" />
                 <TextView
@@ -103,13 +105,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Area"
+                    android:text="Area:"
                     android:gravity="center"
                     android:textStyle="bold"/>
                 <TextView
@@ -117,13 +120,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ubicación"
+                    android:text="Ubicación:"
                     android:gravity="center"
                     android:textStyle="bold"/>
                 <TextView
@@ -131,13 +135,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Descripción"
+                    android:text="Descripción:"
                     android:gravity="center"
                     android:textStyle="bold"/>
                 <TextView
@@ -145,7 +150,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="23"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textSize="16dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="10dp"/>
 

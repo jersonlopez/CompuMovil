@@ -61,7 +61,6 @@ public class Profile_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile_, container,false);
         nameProfile = v.findViewById(R.id.textViewNameProfile);
         lastnameProfile = v.findViewById(R.id.textViewLastnameProfile);
@@ -75,8 +74,6 @@ public class Profile_Fragment extends Fragment {
         genderProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)).toString());
         phoneProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.numberPhone)).toString());
         byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnUser.photo));
-        //ByteArrayInputStream bais = new ByteArrayInputStream(blob);
-        //Bitmap bmp = BitmapFactory.decodeByteArray(pByte, 0, pByte.length);
         bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
         photo.setImageBitmap(bitmap);
         //Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();

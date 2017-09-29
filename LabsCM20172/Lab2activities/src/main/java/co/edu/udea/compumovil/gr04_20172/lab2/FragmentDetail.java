@@ -30,6 +30,8 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
     private CollapsingToolbarLayout toolbar;
     SQLiteDatabase db;
     DbHelper dbHelper;
+    String textubication1;
+    Bitmap bitmap;
     Cursor cursor,cursor2,cursor3;
     TextView name, type, room, cost,area,ubication,description;
     ImageView image;
@@ -46,7 +48,7 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         Bundle bundle = getArguments();
         int id = bundle.getInt("id");
         String id1 = String.valueOf(id);
-        Log.d("Alerta",String.valueOf(id));
+        //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
         String consulta="select * from "+ ApartmentsDB.entityResource + " where Resource." + ApartmentsDB.ColumnResource.id +"="+id;
         dbHelper=new DbHelper(getActivity());
         db=dbHelper.getWritableDatabase();
@@ -54,25 +56,20 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
 
         if(cursor.moveToNext()) {
             cursor.moveToFirst();
-            String textubication1 = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnResource.ubicationApartment));
+            textubication1 = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnResource.ubicationApartment));
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnResource.photo));
+            bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
+            //Toast.makeText(getActivity(),textubication1, Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(getActivity(),"no traje nada", Toast.LENGTH_SHORT).show();
         }
-
-        //String consulta3 = "select * from " + ApartmentsDB.entityApartment+" where "+ApartmentsDB.ColumnApartment.ubicationApartment + "="+ "\"" +
-                //textubication1 + "\"" ;
-        //cursor3= db.rawQuery(consulta3,null);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_detail, container, false);
-        /*Bundle bundle =getArguments();
-        int id = bundle.getInt("id");
-        Log.d("Alerta",String.valueOf(id));*/
         toolbar = (CollapsingToolbarLayout)v.findViewById(R.id.collapsing_toolbar);
         image=v.findViewById(R.id.placeImage);
         type=v.findViewById(R.id.type_apartment_detail);
@@ -84,35 +81,29 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         map = v.findViewById(R.id.map_button);
         map.setOnClickListener(this);
 
-        /*if(cursor3.moveToNext()){
+
+
+        String consulta3 = "select * from " + ApartmentsDB.entityApartment+" where "+ApartmentsDB.ColumnApartment.ubicationApartment + "="+ "\"" +
+                textubication1.toString() + "\"";
+        cursor3= db.rawQuery(consulta3,null);
+        if (cursor3.moveToNext()){
             cursor3.moveToFirst();
-           // String consulta2="select photo from Resource where Resource." +ApartmentsDB.ColumnResource.apartment+"=" +cursor.getInt(0);
-            //cursor2=db.rawQuery(consulta2,null);
-            cursor.moveToFirst();
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnResource.photo));
-            Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-            image.setImageBitmap(bitmap);
 
             String textType =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.typeApartment));
             String textRooms =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.roomsApartment));
             String textPrice =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment));
             String textArea = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment));
-            String textLarge = cursor3.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.LargeDescriptionApartment));
-            String textubication = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
+            String textLarge = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.LargeDescriptionApartment));
 
-            toolbar.setTitle("hola????");
+            toolbar.setTitle(textType);
             type.setText(textType);
             room.setText(textRooms);
             cost.setText(textPrice);
             area.setText(textArea);
-            ubication.setText(textubication);
+            ubication.setText(textubication1);
             description.setText(textLarge);
-        }*/
-
-        /*String consulta="select * from "+ ApartmentDB.table_apartment + " where Apartment.ID= " + id;
-        ApartmentHelper dbHelper=new ApartmentHelper(getActivity());
-        db=dbHelper.getWritableDatabase();
-        Cursor cursor= db.rawQuery(consulta,null);*/
+            image.setImageBitmap(bitmap);
+        }
         return v;
     }
 
@@ -121,7 +112,7 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         switch (view.getId())
         {
             case R.id.map_button:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:6.267359,-75.568988?z=18"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:6.266953,-75.569111?z=30"));
                 if (intent!=null)
                 {
                     startActivity(intent);
