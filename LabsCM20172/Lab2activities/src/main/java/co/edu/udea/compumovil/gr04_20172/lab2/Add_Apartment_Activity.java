@@ -36,6 +36,11 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     ByteArrayOutputStream baos;
     byte[] blob;
 
+
+    public Add_Apartment_Activity(){
+        // Required empty public constructor
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

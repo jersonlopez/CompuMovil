@@ -43,18 +43,7 @@ public class Navigation_Drawer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         email = getIntent().getStringExtra(email);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //tName = (TextView) findViewById(R.id.nam)
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intentToAdd = new Intent(Navigation_Drawer.this, Add_Apartment_Activity.class);
-                intentToAdd.putExtra("email",email);
-                startActivity(intentToAdd);
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="co.edu.udea.compumovil.gr04_20172.lab2.Apartment_Fragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,6 +12,16 @@
         android:color="@color/colorLight"
         android:clickable="true"
         android:id="@+id/rv"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:rippleColor="@color/colorPrimaryDark"
+        android:src="@mipmap/ic_add"
         />
 
 </FrameLayout>

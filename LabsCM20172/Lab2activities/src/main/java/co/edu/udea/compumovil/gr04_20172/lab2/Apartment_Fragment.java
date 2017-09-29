@@ -2,12 +2,15 @@ package co.edu.udea.compumovil.gr04_20172.lab2;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,6 +26,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static co.edu.udea.compumovil.gr04_20172.lab2.ApartmentsDB.ColumnUser.email;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +38,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     RecyclerView rv;
     RecyclerView.LayoutManager llm;
     ArrayList<Apartment> apartments;
+    FloatingActionButton fab;
     private RVAdapter adapter;
     DbHelper dbHelper;
     SQLiteDatabase db;
@@ -91,6 +97,19 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             }
 
         }
+
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Intent intentToAdd = new Intent(getActivity(), Add_Apartment_Activity.class);
+                intentToAdd.putExtra("email",email);
+                getActivity().startActivity(intentToAdd);
+            }
+        });
+
         rv = (RecyclerView) v.findViewById(R.id.rv);
         llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
