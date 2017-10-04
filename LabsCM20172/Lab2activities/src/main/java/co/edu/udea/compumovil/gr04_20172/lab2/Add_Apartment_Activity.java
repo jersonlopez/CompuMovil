@@ -28,6 +28,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     DbHelper dbHelper;
     SQLiteDatabase db;
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
+    String email;
     Button btnAdd;
     ImageView imageView;
     static final int REQUEST_IMAGE_GET = 101;
@@ -35,9 +36,15 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     ByteArrayOutputStream baos;
     byte[] blob;
 
+
+    public Add_Apartment_Activity(){
+        // Required empty public constructor
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        email = getIntent().getStringExtra("email");
         setContentView(R.layout.activity_add__apartment);
         imageView = (ImageView) findViewById(R.id.imageButton);
         imageView.setOnClickListener(this);
@@ -104,13 +111,13 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     Cursor cursor1 = db.rawQuery(consulta1, null);
                     if(cursor1.getCount()>0)
                     {
-                        Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
                         Log.d("Excelente", "Hay datos en el cursor");
                     }
                     else
                     {
                         Toast.makeText(getApplicationContext(), "la imagen no entro", Toast.LENGTH_SHORT).show();
-                        Log.d("Ups","Don bochi sin elementos");
+                        //Log.d("Ups","Don bochi sin elementos");
                     }
                     /*while (cursor.moveToNext()) {
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
@@ -118,6 +125,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
+                    intentNavigation.putExtra("email",email);
                     startActivity(intentNavigation);
                     finish();
                 }

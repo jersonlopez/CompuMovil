@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
             case R.id.buttonLogin:
+                Log.d("TAG","hola");
 
                 String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.password + " from " + ApartmentsDB.entityUser +" where " +ApartmentsDB.ColumnUser.email + "="+ "\"" +
                         email.getText().toString() + "\"" +"and User.password=" + "\"" + password.getText().toString() + "\"";

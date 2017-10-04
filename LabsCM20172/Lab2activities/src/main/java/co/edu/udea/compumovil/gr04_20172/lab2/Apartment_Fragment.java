@@ -1,12 +1,19 @@
 package co.edu.udea.compumovil.gr04_20172.lab2;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +26,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static co.edu.udea.compumovil.gr04_20172.lab2.ApartmentsDB.ColumnUser.email;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,15 +37,26 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     //private RecyclerView.LayoutManager llm;
     RecyclerView rv;
     RecyclerView.LayoutManager llm;
+    ArrayList<Apartment> apartments;
+    FloatingActionButton fab;
+    private RVAdapter adapter;
     DbHelper dbHelper;
     SQLiteDatabase db;
     byte[] blob;
+    int id;
     Bitmap bitmap;
-    ImageView photo;
+    private OnFragmentButtonListener mListener;
 
 
     public Apartment_Fragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dbHelper = new DbHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
     }
 
 
@@ -45,22 +65,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_apartment, container, false);
-        ArrayList<Apartment> apartments;
-
-        rv = (RecyclerView) v.findViewById(R.id.rv);
-        dbHelper = new DbHelper(getActivity()); //Instancia de DbHelper
-        db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
-
-        llm = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(llm);
-
-        //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        //RecyclerView.LayoutManager llm = new LinearLayoutManager(getActivity());
-        //rv.setLayoutManager(llm);
-
         apartments = new ArrayList<>();
-        //apartments.add(new Apartment(R.drawable.in1, "Finca", "90.000.000", "70 m2", "Es una casa bonita, estilo colonial"));
-        //apartments.add(new Apartment(R.drawable.ic_menu_profile, "Segundo piso", "100.000.000", "90 m2", "Es una casa grande, estilo colonial"));
 
         String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
@@ -79,26 +84,70 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             if(cursor1.moveToNext())
             {
                 blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
+                id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.id));
                 bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-                apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
+                apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
+                //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
                 //photo.setImageBitmap(bitmap);
-
-                Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),String.valueOf(id), Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
             }
-            /*String consulta1 = "select " + ApartmentsDB.ColumnResource.photo + " from " + ApartmentsDB.entityResource + " where " + ApartmentsDB.ColumnResource.ubicationApartment+ "="+ "\"" + textubication + "\"" ;
-            Cursor cursor1 = db.rawQuery(consulta1, null);
-            byte[] blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
-            //Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-            //photo.setImageBitmap(bitmap)*/
-            apartments.add(new Apartment(textType, textPrice, textArea, textShort, textubication));
 
         }
-        RVAdapter adapter = new RVAdapter(apartments);
+
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Intent intentToAdd = new Intent(getActivity(), Add_Apartment_Activity.class);
+                intentToAdd.putExtra("email",email);
+                getActivity().startActivity(intentToAdd);
+            }
+        });
+
+        rv = (RecyclerView) v.findViewById(R.id.rv);
+        llm = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(llm);
+        adapter = new RVAdapter(apartments);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int id = adapter.getItem(rv.getChildAdapterPosition(view)).getId();
+                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
+                if(mListener!=null)
+                {
+                    mListener.onFragmentClickButton(id);
+                }
+            }
+        });
         rv.setAdapter(adapter);
+        setHasOptionsMenu(true);
         return v;
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof OnFragmentButtonListener)
+        {
+            mListener = (OnFragmentButtonListener) context;
+        }
+        else{
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentButtonListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -106,11 +155,8 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
 
     }
 
-
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentButtonListener{
         void onFragmentClickButton(int id);
     }
 
-    private class TAG {
-    }
 }

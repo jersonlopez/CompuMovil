@@ -44,7 +44,7 @@ public class Profile_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         DbHelper dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
-        email = getActivity().getIntent().getStringExtra("email").toString();
+        email = getActivity().getIntent().getStringExtra("email");
         //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
         String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.userName +", "+ApartmentsDB.ColumnUser.userLastName
                 +", "+ApartmentsDB.ColumnUser.gender+", "+ApartmentsDB.ColumnUser.numberPhone+ ", " + ApartmentsDB.ColumnUser.photo+" from " + ApartmentsDB.entityUser +" where " +ApartmentsDB.ColumnUser.email + "="+ "\"" +
@@ -52,7 +52,7 @@ public class Profile_Fragment extends Fragment {
         //Toast.makeText(getActivity(),consulta, Toast.LENGTH_SHORT).show();
         cursor = db.rawQuery(consulta,null);
 
-        if (cursor.moveToNext() != false ){
+        if (cursor.moveToNext()){
            // Toast.makeText(getActivity(),cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)),Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(getActivity(), "Vacio", Toast.LENGTH_SHORT).show();
@@ -61,7 +61,6 @@ public class Profile_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile_, container,false);
         nameProfile = v.findViewById(R.id.textViewNameProfile);
         lastnameProfile = v.findViewById(R.id.textViewLastnameProfile);
@@ -75,14 +74,10 @@ public class Profile_Fragment extends Fragment {
         genderProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)).toString());
         phoneProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.numberPhone)).toString());
         byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnUser.photo));
-        //ByteArrayInputStream bais = new ByteArrayInputStream(blob);
-        //Bitmap bmp = BitmapFactory.decodeByteArray(pByte, 0, pByte.length);
         bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
         photo.setImageBitmap(bitmap);
-        Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
         return v;
     }
 
-    public interface OnFragmentInteractionListener {
-    }
 }

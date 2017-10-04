@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="Settings">
+
+    <Preference
+        android:summary="Edita nombre, foto, correo..."
+        android:key="updateProfile"
+        android:title="Actualizar perfil">
+        <intent
+            android:action="android.intent.action.EDIT_PROFILE"
+            android:targetClass="co.edu.udea.compumovil.gr04_20172.lab2.Activity.EditProfile"/>
+
+    </Preference>
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="swicthSession"
+        android:summary="evitar loguearse cada vez que se abra la app"
+        android:title="Mantener sesion iniciada" />
+
+
+    <PreferenceCategory app:title="Opciones">
+
+        <CheckBoxPreference
+            android:key="notificationAllow"
+            android:summary="activar/desactivar notificaciones"
+            android:title="Activar Notificaciones" />
+
+        <CheckBoxPreference
+            android:key="notificationSound"
+            android:summary="activar/desactivar sonido de notificaciones"
+            android:title="Sonido Notificaciones" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

@@ -16,16 +16,18 @@ public class Apartment {
     String area;
     String description;
     String ubication;
-   // byte[] photo;
+    Bitmap photo;
+    int id;
 
 
-    Apartment(/*byte[] photo,*/ String type, String price, String area, String description, String ubication) {
-        //this.photo = photo;
+    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
+        this.photo = photo;
         this.type = type;
         this.price = price;
         this.area = area;
         this.description = description;
         this.ubication = ubication;
+        this.id = id;
 
     }
 
@@ -61,13 +63,13 @@ public class Apartment {
         this.description = description;
     }
 
-    /*public byte[] getPhoto() {
+    public Bitmap getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(Bitmap photo) {
         this.photo = photo;
-    }*/
+    }
 
     public String getUbitacion() {
         return ubication;
@@ -75,6 +77,14 @@ public class Apartment {
 
     public void setUbication(String ubication) {
         this.type = ubication;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 

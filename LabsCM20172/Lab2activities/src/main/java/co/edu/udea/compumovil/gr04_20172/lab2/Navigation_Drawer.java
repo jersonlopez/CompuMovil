@@ -27,11 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Navigation_Drawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Apartment_Fragment.OnFragmentInteractionListener
-        ,Profile_Fragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, Apartment_Fragment.OnFragmentButtonListener{
 
     Fragment fragment=null;
     Boolean fragmentChoose=false;
+    String email;
+    FragmentTransaction transaction = getFragmentManager().beginTransaction();
     TextView tName, tEmail;
 
 
@@ -40,18 +41,9 @@ public class Navigation_Drawer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation__drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        email = getIntent().getStringExtra(email);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //tName = (TextView) findViewById(R.id.nam)
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intentToAdd = new Intent(Navigation_Drawer.this, Add_Apartment_Activity.class);
-                startActivity(intentToAdd);
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -112,10 +104,13 @@ public class Navigation_Drawer extends AppCompatActivity
         } else if (id == R.id.itemProfile) {
             fragment=new Profile_Fragment();
             fragmentChoose=true;
+            //transaction.addToBackStack(null);
+            //transaction.commit();
 
         } else if (id == R.id.itemSetting) {
             fragment =new SettingsScreen();
             fragmentChoose=true;
+
 
         } else if (id == R.id.itemSign_off) {
             Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class);
@@ -141,7 +136,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
     @Override
     public void onFragmentClickButton(int id) {
-        fragment=new ApartmentDetailFragment();
+        fragment=new FragmentDetail();
         Bundle bundle=new Bundle();
         bundle.putInt("id",id);
         fragment.setArguments(bundle);
@@ -151,4 +146,7 @@ public class Navigation_Drawer extends AppCompatActivity
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
+
 }
