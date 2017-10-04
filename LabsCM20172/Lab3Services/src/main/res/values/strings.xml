@@ -1,0 +1,48 @@
+<resources>
+    <!--Titulo de la Aplicacion-->
+    <string name="app_name">LabsCM20172</string>
+
+    <!--Strings del navigation Drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="Apartments">Apartamentos</string>
+    <string name="Profile">Perfil</string>
+    <string name="Settings">Configuraciones</string>
+    <string name="Sign_off">Cerrar sesión</string>
+    <string name="About">Acerca de</string>
+    <string name="Communicate">Comunicar</string>
+
+    <!--Strings del Login-->
+    <string name="login">Ingresar</string>
+    <string name="emailLogin">Ingrese correo</string>
+    <string name="passwordLogin">Ingrese contraseña</string>
+    <string name="logup">Registrarse</string>
+
+    <!--Strings del Register-->
+    <string name="editLastnameRegister">Ingrese apellido</string>
+    <string name="editNameRegister">Ingrese nombre</string>
+    <string name="elegirImagenRegister">Elegir imagen</string>
+    <string name="editAddressRegister">Ingrese dirección</string>
+    <string name="editEmailRegister">Ingrese correo</string>
+    <string name="editCityRegister">Ingrese Ciudad</string>
+    <string name="editPhoneRegister">Ingrese numero telefonico</string>
+    <string name="selectDateRegister">Elija fecha de nacimiento</string>
+    <string name="editPasswordRegister">Ingrese Contraseña</string>
+    <string name="editConfirmPasswordRegister">Confirmar contraseña</string>
+    <string name="editSaveRegister">Guardar</string>
+    <string name="manRegister">Hombre</string>
+    <string name="womanRegister">Mujer</string>
+    <string name="action_settings">action_settings</string>
+    <string name="selectImage">Elegir</string>
+
+    <!--Strings del addApartmet-->
+    <string name="addApartmentText">Agregar Apartamento</string>
+
+    <!--Strings del about-->
+    <string name="aboutTextView">Inmobiliaria Ensueño busca apartamentos y casas en renta y te los muestra en una única página de resultados. De esta manera, buscando en un único lugar, te aseguras de que encontrarás la casa de tus sueños, por muy escondida que esté. Fácil, cómodo, rápido.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
