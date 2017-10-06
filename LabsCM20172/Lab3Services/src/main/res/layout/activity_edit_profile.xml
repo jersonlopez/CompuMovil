@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.edu.udea.compumovil.gr04_20172.lab2.co.edu.udea.compumovil.gr04_20172.lab3.EditProfile">
+    tools:context="co.edu.udea.compumovil.gr04_20172.lab3.EditProfile">
 
 </android.support.constraint.ConstraintLayout>

@@ -110,7 +110,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int id = adapter.getItem(rv.getChildAdapterPosition(view)).getId();
+                int id = adapter.getItem(rv.getChildAdapterPosition(view)).getId1();
                 //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                 if(mListener!=null)
                 {

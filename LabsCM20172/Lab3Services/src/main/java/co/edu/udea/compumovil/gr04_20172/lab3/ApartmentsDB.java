@@ -12,11 +12,11 @@ public class ApartmentsDB {
     public static final String dbName = "Ensueno.db"; //Nombre de la DB
     public static final int dbVersion = 1; //Versión de la DB
 
-    public static final String entityUser = "User"; //Tabla usuario
+    public static final String entityUser = "Customer"; //Tabla usuario
     public static final String entityApartment = "Apartment"; //Tabla apartamento
     public static final String entityResource = "Resource"; //Tabla Resource
 
-    public class ColumnUser { //Columnas de la tabla User
+    public class ColumnUser { //Columnas de la tabla Customer
         public static final String email = BaseColumns._ID; // correo primary key
         public static final String userName  = "userName";
         public static final String userLastName = "userlastName";

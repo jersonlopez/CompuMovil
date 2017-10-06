@@ -23,6 +23,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -30,6 +34,24 @@ import java.util.Calendar;
 import static co.edu.udea.compumovil.gr04_20172.lab3.R.id.imageView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //PERMISOS
+    private final int MY_PERMISSIONS_GALERIA = 100;
+    private final int MY_PERMISSIONS_INTERNET = 150;
+    private final int OPEN_GALERIA = 200;
+
+    // LINK DEL SERIVDOR
+    private final String HOST_CODE = "https://ensuenoservices-jersonlopez.c9users.io";
+
+    // COMPLEMENTOS
+    private final String URL_CUSTOMERS_COMPLEMENT = ":8080/api/Customers/";
+    private final String URL_CONTAINER_DOWN_COMPLEMENT = ":8080/api/Containers/user/download/";
+    private final String URL_CONTAINER_UP_COMPLEMENT = ":8080/api/Containers/user/upload";
+
+    private final String URL_CUSTOMERS = HOST_CODE.concat(URL_CUSTOMERS_COMPLEMENT);
+    private final String URL_CONTAINER_DOWN = HOST_CODE.concat(URL_CONTAINER_DOWN_COMPLEMENT);
+    private final String URL_CONTAINER_UP = HOST_CODE.concat(URL_CONTAINER_UP_COMPLEMENT);
+
     private static final String TAG = "TAG";
     private Uri imageCaptureUri;
     private ImageView myImageView;
@@ -37,8 +59,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private static final int PICK_FROM_FILE = 2;
     static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
-    //private int day, month, year;
-    //ImageButton imageViewProfile;
     DbHelper dbHelper;
     SQLiteDatabase db;
     Button btnsave;
@@ -172,10 +192,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 datePickerDialog.show();
                 break;
 
-            /*case R.id.imageViewProfile:
-
-                break;*/
-
             case R.id.btnSave:
 
                 String textName = eName.getText().toString();
@@ -288,4 +304,126 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         }
     }
+
+    /*private void obtenerEstudiante() {
+        String id_Student = txtId.getText().toString();
+        if ("".equals(id_Student)){
+            Toast.makeText(this, "Ingrese un Id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL_STUDENTS.concat("/").concat(id_Student), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        Student student = new Gson().fromJson(response.toString(), Student.class);
+
+                        lblId.setText(String.valueOf(student.getId()));
+                        lblNombre.setText(student.getFirstname());
+                        lblApellido.setText(student.getLastname());
+                        lblGenero.setText(student.getGender());
+
+                        Glide.with(MainActivity.this)
+                                .load(URL_CONTAINER_DOWN.concat(String.valueOf(student.getId())).concat(student.getPhoto()))
+                                .into(img_mostrar);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error consultando información", Toast.LENGTH_SHORT).show();
+                        //Log.d("nada2",error.getMessage());
+                    }
+                }
+        );
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }*/
+
+   /* private void agregarCustomer() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, URL_CUSTOMERS,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        //lblApellido.setText(response);
+
+                          //  Una vez agregado el Estudiante con éxito procedemos a cargar la imagen
+
+                        //Suponiendo que salga todo bien
+
+                        Student student = new Gson().fromJson(response, Student.class);
+
+                        String nombre = student.getId()+student.getPhoto(); //Nommbre de la imagen
+                        sendImage(URL_CONTAINER_UP,nombre); //Subimos la imagen
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error al crear el Student", Toast.LENGTH_SHORT).show();
+                        //Log.d("nada",error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("firstname", txtNombre.getText().toString());
+                params.put("lastname", txtApellidos.getText().toString());
+                params.put("gender", txtGenero.getText().toString());
+                params.put("photo", "img.jpg"); //Siguiendo el formato que de definió, también puede ser "img.png"
+
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(postRequest);
+    }
+
+    private void sendImage(String url, final String nameImage) {
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+                lblNombre.setText(resultResponse);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error subiendo la imagen", Toast.LENGTH_SHORT).show();
+                //Log.d("nada3", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("api_token", "gh659gjhvdyudo973823tt9gvjf7i6ric75r76");
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params.put("image", new DataPart(nameImage, imagenSeleccionada, "image/jpeg"));
+                //params.put("cover", new DataPart("file_cover.jpg", AppHelper.getFileDataFromDrawable(getBaseContext(), mCoverImage.getDrawable()), "image/jpeg"));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                //headers.put("SessionId", mSessionId);
+                return headers;
+            }
+        };
+        VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
+    }*/
 }
