@@ -14,10 +14,11 @@
     </Preference>
 
     <SwitchPreference
+        android:layout_width="match_parent"
         android:defaultValue="true"
         android:key="swicthSession"
         android:summary="evitar loguearse cada vez que se abra la app"
-        android:title="Mantener sesion iniciada" />
+        android:title="Mantener sesion" />
 
 
     <PreferenceCategory app:title="Opciones">

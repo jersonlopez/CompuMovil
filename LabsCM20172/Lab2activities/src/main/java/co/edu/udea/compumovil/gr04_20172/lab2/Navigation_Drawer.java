@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,8 @@ public class Navigation_Drawer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation__drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        email = getIntent().getStringExtra(email);
+        email = getIntent().getStringExtra("email");
+        //Toast.makeText(getApplicationContext(),"ppal " + email, Toast.LENGTH_SHORT).show();
         setSupportActionBar(toolbar);
 
 

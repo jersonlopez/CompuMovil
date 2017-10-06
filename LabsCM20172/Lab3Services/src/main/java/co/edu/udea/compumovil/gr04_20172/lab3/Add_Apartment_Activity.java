@@ -151,11 +151,11 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
                     }*/
-                    /*Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
                     intentNavigation.putExtra("email",email);
                     startActivity(intentNavigation);
-                    finish();*/
+                    finish();
                 }
                 break;
 
@@ -171,13 +171,13 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_GET);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), OPEN_GALERIA);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == OPEN_GALERIA && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             // Log.d(TAG, String.valueOf(bitmap));
             try {
@@ -203,7 +203,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                URL_APARTMENTS.concat("/").concat(id_Apartment), null,
+                URL_APARTMENTS.concat(id_Apartment), null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
@@ -236,7 +236,6 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                 {
                     @Override
                     public void onResponse(String response) {
-                        //lblApellido.setText(response);
 
                           //  Una vez agregado el Estudiante con éxito procedemos a cargar la imagen
 
@@ -274,7 +273,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
             }
         };
         VolleySingleton.getInstance(this).addToRequestQueue(postRequest);
-       Toast.makeText(this, "acabe de agregar", Toast.LENGTH_SHORT).show();
+       //Toast.makeText(this, "acabe de agregar", Toast.LENGTH_SHORT).show();
     }
 
     private void sendImage(String url, final String nameImage) {
@@ -306,8 +305,6 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
                 params.put("image", new DataPart(nameImage, blob, "image/png"));
-                //params.put("cover", new DataPart("file_cover.jpg", AppHelper.getFileDataFromDrawable(getBaseContext(), mCoverImage.getDrawable()), "image/jpeg"));
-
                 return params;
             }
 

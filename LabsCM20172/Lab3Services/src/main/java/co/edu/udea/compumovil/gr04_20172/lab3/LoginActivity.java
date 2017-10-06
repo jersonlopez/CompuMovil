@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.buttonLogin:
                 Log.d("TAG", "hola");
                 if (verificarPermisoInternet()) { //verificar los permisos
-                    obtenerCustomer();
-                    Toast.makeText(this, "Consultando", Toast.LENGTH_SHORT).show();
+                    getCustomer();
+                    //Toast.makeText(this, "Consultando", Toast.LENGTH_SHORT).show();
                 } else
                     requestPermissions(new String[]{INTERNET}, MY_PERMISSIONS_INTERNET); //Solicitamos los permisos para el internet
                 break;
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void obtenerCustomer() {
+    private void getCustomer() {
         String id_Customer = email.getText().toString();
         if ("".equals(id_Customer)) {
             Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show();

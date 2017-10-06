@@ -9,7 +9,7 @@
         android:title="Actualizar perfil">
         <intent
             android:action="android.intent.action.EDIT_PROFILE"
-            android:targetClass="co.edu.udea.compumovil.gr04_20172.lab2.Activity.EditProfile"/>
+            android:targetClass="co.edu.udea.compumovil.gr04_20172.lab3.Activity.EditProfile"/>
 
     </Preference>
 

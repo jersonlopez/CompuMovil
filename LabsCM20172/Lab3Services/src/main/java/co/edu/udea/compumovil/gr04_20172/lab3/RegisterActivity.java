@@ -23,13 +23,23 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import static co.edu.udea.compumovil.gr04_20172.lab3.R.id.imageView;
 
@@ -69,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     String textImage = "";
     Bitmap bitmap;
     ByteArrayOutputStream baos;
-    byte[] blob;
+    byte[] blob = null;
 
 
     @Override
@@ -94,79 +104,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnsave.setOnClickListener(this);
         dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
         db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
-
-
-        /*final String[] items = new String[]{"From Cam", "From SD Card"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select imagen");
-        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File file = new File(Environment.getExternalStorageDirectory(), "tmp_avatar" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    imageCaptureUri = Uri.fromFile(file);
-                    try {
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
-                        intent.putExtra("return data", true);
-
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    dialog.cancel();
-                } else {
-                    Intent intent = new Intent();
-                    intent.setType("image*//*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Complete_action_using"), PICK_FROM_FILE);
-                }
-            }
-        });
-        final AlertDialog dialog = builder.create();
-
-        btn_choose_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-
-            }
-        });*/
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK)
-            return;
-        Bitmap bitmap = null;
-        String path = "";
-        if (requestCode == PICK_FROM_FILE) {
-            imageCaptureUri = data.getData();
-            path = getRealPathfromURI(imageCaptureUri);
-            if (path == null) {
-                path = imageCaptureUri.getPath();
-            }
-            if (path != null) {
-                bitmap = BitmapFactory.decodeFile(path);
-            }
-        } else {
-            path = imageCaptureUri.getPath();
-            bitmap = BitmapFactory.decodeFile(path);
-        }
-        myImageView.setImageBitmap(bitmap);
-
-    }
-
-    public String getRealPathfromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.N)
 
@@ -210,9 +148,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else if (textPassword.equals(textCPassword)) {
 
                     //    Aqui va el codigo de guardar en el servidor
+                    postCustomer();
 
-
-                    baos = new ByteArrayOutputStream();
+                    /*baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
                     blob = baos.toByteArray();
 
@@ -297,6 +235,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
+                blob = baos.toByteArray();
                 myImageView.setImageBitmap(bitmap);
                 textImage = "tengo foto";
             } catch (IOException e) {
@@ -305,29 +246,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /*private void obtenerEstudiante() {
-        String id_Student = txtId.getText().toString();
-        if ("".equals(id_Student)){
+    private void getCustomer() {
+        String id_Customer = eEmail.getText().toString();
+        if ("".equals(id_Customer)){
             Toast.makeText(this, "Ingrese un Id", Toast.LENGTH_SHORT).show();
             return;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                URL_STUDENTS.concat("/").concat(id_Student), null,
+                URL_CUSTOMERS.concat(id_Customer), null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Student student = new Gson().fromJson(response.toString(), Student.class);
+                        Customer customer = new Gson().fromJson(response.toString(), Customer.class);
 
-                        lblId.setText(String.valueOf(student.getId()));
-                        lblNombre.setText(student.getFirstname());
-                        lblApellido.setText(student.getLastname());
-                        lblGenero.setText(student.getGender());
+                        String prueba = customer.getId();
+                        String prueba1 = customer.getPassword();
+                        Toast.makeText(RegisterActivity.this, prueba, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, prueba1, Toast.LENGTH_SHORT).show();
 
-                        Glide.with(MainActivity.this)
-                                .load(URL_CONTAINER_DOWN.concat(String.valueOf(student.getId())).concat(student.getPhoto()))
-                                .into(img_mostrar);
+                        Glide.with(RegisterActivity.this)
+                                .load(URL_CONTAINER_DOWN.concat(String.valueOf(customer.getId())).concat(customer.getPhoto()))
+                                .into(myImageView);
                     }
                 },
                 new Response.ErrorListener() {
@@ -339,9 +280,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
         );
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-    }*/
+    }
 
-   /* private void agregarCustomer() {
+   private void postCustomer() {
         StringRequest postRequest = new StringRequest(Request.Method.POST, URL_CUSTOMERS,
                 new Response.Listener<String>()
                 {
@@ -353,9 +294,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                         //Suponiendo que salga todo bien
 
-                        Student student = new Gson().fromJson(response, Student.class);
+                        Customer customer = new Gson().fromJson(response, Customer.class);
 
-                        String nombre = student.getId()+student.getPhoto(); //Nommbre de la imagen
+                        String nombre = customer.getId()+customer.getPhoto(); //Nommbre de la imagen
                         sendImage(URL_CONTAINER_UP,nombre); //Subimos la imagen
                     }
                 },
@@ -363,7 +304,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Error al crear el Student", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error al crear el Cliente", Toast.LENGTH_SHORT).show();
                         //Log.d("nada",error.getMessage());
                     }
                 }
@@ -372,15 +313,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<String, String>();
-                params.put("firstname", txtNombre.getText().toString());
-                params.put("lastname", txtApellidos.getText().toString());
-                params.put("gender", txtGenero.getText().toString());
-                params.put("photo", "img.jpg"); //Siguiendo el formato que de definió, también puede ser "img.png"
+                params.put("Id", eEmail.getText().toString());
+                params.put("username", eName.getText().toString());
+                params.put("userlastname", eLastname.getText().toString());
+                params.put("birthdate", eBorn.getText().toString());
+                params.put("address", eDirection.getText().toString());
+                params.put("password", ePassword.getText().toString());
+                params.put("numberphone", ePhone.getText().toString());
+                params.put("gender", textGender);
+                params.put("city", eCity.getText().toString());
+                params.put("photo", "img.png"); //Siguiendo el formato que de definió, también puede ser "img.jpg"
 
                 return params;
             }
         };
         VolleySingleton.getInstance(this).addToRequestQueue(postRequest);
+       //Toast.makeText(this, "acabe de agregar", Toast.LENGTH_SHORT).show();
     }
 
     private void sendImage(String url, final String nameImage) {
@@ -389,7 +337,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
-                lblNombre.setText(resultResponse);
+                //lblNombre.setText(resultResponse);
 
             }
         }, new Response.ErrorListener() {
@@ -411,9 +359,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Map<String, DataPart> params = new HashMap<>();
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
-                params.put("image", new DataPart(nameImage, imagenSeleccionada, "image/jpeg"));
-                //params.put("cover", new DataPart("file_cover.jpg", AppHelper.getFileDataFromDrawable(getBaseContext(), mCoverImage.getDrawable()), "image/jpeg"));
-
+                params.put("image", new DataPart(nameImage, blob, "image/png"));
                 return params;
             }
 
@@ -425,5 +371,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         };
         VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
-    }*/
+    }
 }
