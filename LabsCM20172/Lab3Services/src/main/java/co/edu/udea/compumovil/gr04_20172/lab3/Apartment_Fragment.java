@@ -189,22 +189,27 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Apartment apartment = new Gson().fromJson(response.toString(), Apartment.class);
+                        Apartment[] apartment = new Gson().fromJson(response.toString(), Apartment[].class);
 
-                        String textType = apartment.getType();
-                        String textPrice = apartment.getPrice();
-                        String textArea = apartment.getArea();
-                        String textShort = apartment.getShortdescriptionapartment();
-                        String textubication = apartment.getId();
+                        if (apartment != null){
+                            for (int i = 0; i < apartment.length ; i++){
+                                String textType = apartment[i].getType();
+                                String textPrice = apartment[i].getPrice();
+                                String textArea = apartment[i].getArea();
+                                String textShort = apartment[i].getShortdescriptionapartment();
+                                String textubication = apartment[i].getId();
 
-                        Glide.with(Apartment_Fragment.this)
-                                .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment.getId())).concat(apartment.getPhotoapartment()))
-                                .into(imageView);
+                                Glide.with(Apartment_Fragment.this)
+                                        .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment[i].getId())).concat(apartment[i].getPhotoapartment()))
+                                        .into(imageView);
 
-                        imageView.buildDrawingCache();
-                        bitmap = imageView.getDrawingCache();
+                                imageView.buildDrawingCache();
+                                bitmap = imageView.getDrawingCache();
 
-                        apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                                apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                            }
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
