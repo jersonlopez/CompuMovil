@@ -4,7 +4,7 @@ package co.edu.udea.compumovil.gr04_20172.lab3;
  * Created by dairo.garcia on 5/10/17.
  */
 
-public class User {
+public class Customer {
     String Id;
     String username;
     String userlastname;
@@ -16,9 +16,9 @@ public class User {
     String city;
     String photo;
 
-    public User(String Id,String username,String userlastname,String birthdate,
-                String address,String password,String numberphone,String gender,
-                String city,String photo){
+    public Customer(String Id, String username, String userlastname, String birthdate,
+                    String address, String password, String numberphone, String gender,
+                    String city, String photo){
 
         this.Id = Id;
         this.username = username;

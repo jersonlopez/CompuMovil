@@ -23,13 +23,45 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import static co.edu.udea.compumovil.gr04_20172.lab3.R.id.imageView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //PERMISOS
+    private final int MY_PERMISSIONS_GALERIA = 100;
+    private final int MY_PERMISSIONS_INTERNET = 150;
+    private final int OPEN_GALERIA = 200;
+
+    // LINK DEL SERIVDOR
+    private final String HOST_CODE = "https://ensuenoservices-jersonlopez.c9users.io";
+
+    // COMPLEMENTOS
+    private final String URL_CUSTOMERS_COMPLEMENT = ":8080/api/Customers/";
+    private final String URL_CONTAINER_DOWN_COMPLEMENT = ":8080/api/Containers/user/download/";
+    private final String URL_CONTAINER_UP_COMPLEMENT = ":8080/api/Containers/user/upload";
+
+    private final String URL_CUSTOMERS = HOST_CODE.concat(URL_CUSTOMERS_COMPLEMENT);
+    private final String URL_CONTAINER_DOWN = HOST_CODE.concat(URL_CONTAINER_DOWN_COMPLEMENT);
+    private final String URL_CONTAINER_UP = HOST_CODE.concat(URL_CONTAINER_UP_COMPLEMENT);
+
     private static final String TAG = "TAG";
     private Uri imageCaptureUri;
     private ImageView myImageView;
@@ -37,8 +69,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private static final int PICK_FROM_FILE = 2;
     static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
-    //private int day, month, year;
-    //ImageButton imageViewProfile;
     DbHelper dbHelper;
     SQLiteDatabase db;
     Button btnsave;
@@ -49,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     String textImage = "";
     Bitmap bitmap;
     ByteArrayOutputStream baos;
-    byte[] blob;
+    byte[] blob = null;
 
 
     @Override
@@ -74,79 +104,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnsave.setOnClickListener(this);
         dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
         db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
-
-
-        /*final String[] items = new String[]{"From Cam", "From SD Card"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select imagen");
-        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File file = new File(Environment.getExternalStorageDirectory(), "tmp_avatar" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    imageCaptureUri = Uri.fromFile(file);
-                    try {
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
-                        intent.putExtra("return data", true);
-
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    dialog.cancel();
-                } else {
-                    Intent intent = new Intent();
-                    intent.setType("image*//*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Complete_action_using"), PICK_FROM_FILE);
-                }
-            }
-        });
-        final AlertDialog dialog = builder.create();
-
-        btn_choose_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-
-            }
-        });*/
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK)
-            return;
-        Bitmap bitmap = null;
-        String path = "";
-        if (requestCode == PICK_FROM_FILE) {
-            imageCaptureUri = data.getData();
-            path = getRealPathfromURI(imageCaptureUri);
-            if (path == null) {
-                path = imageCaptureUri.getPath();
-            }
-            if (path != null) {
-                bitmap = BitmapFactory.decodeFile(path);
-            }
-        } else {
-            path = imageCaptureUri.getPath();
-            bitmap = BitmapFactory.decodeFile(path);
-        }
-        myImageView.setImageBitmap(bitmap);
-
-    }
-
-    public String getRealPathfromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.N)
 
@@ -172,10 +130,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 datePickerDialog.show();
                 break;
 
-            /*case R.id.imageViewProfile:
-
-                break;*/
-
             case R.id.btnSave:
 
                 String textName = eName.getText().toString();
@@ -194,9 +148,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else if (textPassword.equals(textCPassword)) {
 
                     //    Aqui va el codigo de guardar en el servidor
+                    postCustomer();
 
-
-                    baos = new ByteArrayOutputStream();
+                    /*baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
                     blob = baos.toByteArray();
 
@@ -281,11 +235,141 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
+                blob = baos.toByteArray();
                 myImageView.setImageBitmap(bitmap);
                 textImage = "tengo foto";
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void getCustomer() {
+        String id_Customer = eEmail.getText().toString();
+        if ("".equals(id_Customer)){
+            Toast.makeText(this, "Ingrese un Id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL_CUSTOMERS.concat(id_Customer), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        Customer customer = new Gson().fromJson(response.toString(), Customer.class);
+
+                        String prueba = customer.getId();
+                        String prueba1 = customer.getPassword();
+                        Toast.makeText(RegisterActivity.this, prueba, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, prueba1, Toast.LENGTH_SHORT).show();
+
+                        Glide.with(RegisterActivity.this)
+                                .load(URL_CONTAINER_DOWN.concat(String.valueOf(customer.getId())).concat(customer.getPhoto()))
+                                .into(myImageView);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error consultando información", Toast.LENGTH_SHORT).show();
+                        //Log.d("nada2",error.getMessage());
+                    }
+                }
+        );
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+   private void postCustomer() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, URL_CUSTOMERS,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        //lblApellido.setText(response);
+
+                          //  Una vez agregado el Estudiante con éxito procedemos a cargar la imagen
+
+                        //Suponiendo que salga todo bien
+
+                        Customer customer = new Gson().fromJson(response, Customer.class);
+
+                        String nombre = customer.getId()+customer.getPhoto(); //Nommbre de la imagen
+                        sendImage(URL_CONTAINER_UP,nombre); //Subimos la imagen
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error al crear el Cliente", Toast.LENGTH_SHORT).show();
+                        //Log.d("nada",error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Id", eEmail.getText().toString());
+                params.put("username", eName.getText().toString());
+                params.put("userlastname", eLastname.getText().toString());
+                params.put("birthdate", eBorn.getText().toString());
+                params.put("address", eDirection.getText().toString());
+                params.put("password", ePassword.getText().toString());
+                params.put("numberphone", ePhone.getText().toString());
+                params.put("gender", textGender);
+                params.put("city", eCity.getText().toString());
+                params.put("photo", "img.png"); //Siguiendo el formato que de definió, también puede ser "img.jpg"
+
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(postRequest);
+       //Toast.makeText(this, "acabe de agregar", Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendImage(String url, final String nameImage) {
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+                //lblNombre.setText(resultResponse);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error subiendo la imagen", Toast.LENGTH_SHORT).show();
+                //Log.d("nada3", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("api_token", "gh659gjhvdyudo973823tt9gvjf7i6ric75r76");
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params.put("image", new DataPart(nameImage, blob, "image/png"));
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                //headers.put("SessionId", mSessionId);
+                return headers;
+            }
+        };
+        VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
     }
 }

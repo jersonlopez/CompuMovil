@@ -45,6 +45,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         email = getIntent().getStringExtra("email");
+        //Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_add__apartment);
         imageView = (ImageView) findViewById(R.id.imageButton);
         imageView.setOnClickListener(this);
@@ -124,8 +125,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
                     }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
-                    Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class);
+                    Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intentNavigation.putExtra("email",email);
+                    //Toast.makeText(getApplicationContext(),"cogi el correo "+ email, Toast.LENGTH_SHORT).show();
                     startActivity(intentNavigation);
                     finish();
                 }

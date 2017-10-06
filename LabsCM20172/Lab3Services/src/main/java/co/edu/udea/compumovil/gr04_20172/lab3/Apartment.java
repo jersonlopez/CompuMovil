@@ -11,23 +11,23 @@ import java.util.List;
 
 public class Apartment {
     //int photoId;
+
     String type;
     String price;
     String area;
     String description;
     String ubication;
     Bitmap photo;
-    int id;
+    int id1;
 
-
-    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
+    public Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
         this.photo = photo;
         this.type = type;
         this.price = price;
         this.area = area;
         this.description = description;
         this.ubication = ubication;
-        this.id = id;
+        this.id1 = id;
 
     }
 
@@ -76,15 +76,100 @@ public class Apartment {
     }
 
     public void setUbication(String ubication) {
-        this.type = ubication;
+        this.ubication = ubication;
     }
 
-    public int getId() {
-        return id;
+    public int getId1() {
+        return id1;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId1(int id) {
+        this.id1 = id;
+    }
+
+
+    //Atributos
+    String Id;
+    String photoapartment;
+    String typeapartment;
+    String priceapartment;
+    String areaapartment;
+    String roomsapartment;
+    String shortdescriptionapartment;
+    String largedescriptionapartment;
+
+    public Apartment(String Id, String photoapartment, String typeapartment, String priceapartment, String areaapartment, String roomsapartment, String shortdescriptionapartment, String largedescriptionapartment) {
+        this.Id = Id;
+        this.photoapartment = photoapartment;
+        this.typeapartment = typeapartment;
+        this.priceapartment = priceapartment;
+        this.areaapartment = areaapartment;
+        this.roomsapartment = roomsapartment;
+        this.shortdescriptionapartment = shortdescriptionapartment;
+        this.largedescriptionapartment = largedescriptionapartment;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
+    public String getPhotoapartment() {
+        return photoapartment;
+    }
+
+    public void setPhotoapartment(String photoapartment) {
+        this.photoapartment = photoapartment;
+    }
+
+    public String getTypeapartment() {
+        return typeapartment;
+    }
+
+    public void setTypeapartment(String typeapartment) {
+        this.typeapartment = typeapartment;
+    }
+
+    public String getPriceapartment() {
+        return priceapartment;
+    }
+
+    public void setPriceapartment(String priceapartment) {
+        this.priceapartment = priceapartment;
+    }
+
+    public String getAreaapartment() {
+        return areaapartment;
+    }
+
+    public void setAreaapartment(String areaapartment) {
+        this.areaapartment = areaapartment;
+    }
+
+    public String getRoomsapartment() {
+        return roomsapartment;
+    }
+
+    public void setRoomsapartment(String roomsapartment) {
+        this.roomsapartment = roomsapartment;
+    }
+
+    public String getShortdescriptionapartment() {
+        return shortdescriptionapartment;
+    }
+
+    public void setShortdescriptionapartment(String shortdescriptionapartment) {
+        this.shortdescriptionapartment = shortdescriptionapartment;
+    }
+
+    public String getLargedescriptionapartment() {
+        return largedescriptionapartment;
+    }
+
+    public void setLargedescriptionapartment(String largedescriptionapartment) {
+        this.largedescriptionapartment = largedescriptionapartment;
     }
 }
-

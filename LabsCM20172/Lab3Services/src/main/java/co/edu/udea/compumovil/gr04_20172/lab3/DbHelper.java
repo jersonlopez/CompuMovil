@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         //Tabla user
 
-        String sqlUser = String
+       String sqlUser = String
                 .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s blob)",
                         ApartmentsDB.entityUser,
                         ApartmentsDB.ColumnUser.email,
@@ -77,7 +77,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("drop table if exists " + ApartmentsDB.entityUser);//Borrar tabla
+        //db.execSQL("drop table if exists " + ApartmentsDB.entityUser);//Borrar tabla
         db.execSQL("drop table if exists " + ApartmentsDB.entityApartment);//Borrar tabla
         db.execSQL("drop table if exists " + ApartmentsDB.entityResource);//Borrar tabla
         onCreate(db);//Crear tabla de nuevo
