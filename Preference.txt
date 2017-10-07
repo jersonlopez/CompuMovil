@@ -1,0 +1,235 @@
+Splas,------------------
+
+package co.edu.udea.compumovil.gr05_20172.lab1;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.support.annotation.BoolRes;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Switch;
+
+public class SplashScreenActivity extends AppCompatActivity {
+    SharedPreferences mPreferences;
+    String email="";
+    String password="";
+    Boolean session=true;
+
+    // broadcast
+
+    private static final String CUSTOM_ACTION = "co.edu.udea.compumovil.gr05_20172.lab1.BOOT";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+
+
+        mPreferences = getSharedPreferences("DATOS", 0);
+        email = mPreferences.getString("email", null);
+        password = mPreferences.getString("password", null);
+        session = mPreferences.getBoolean("session", true);
+
+        if(session){
+            if (email!=null){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getApplicationContext(),ApartmentActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 2500);
+            }else{
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 2500);
+            }
+
+        }else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 2500);
+        }
+
+        startService();
+    }
+
+    public void startService() {
+
+        Intent intent = new Intent();
+        intent.setAction(CUSTOM_ACTION);
+        sendBroadcast(intent);
+    }
+}
+
+manifest
+
+
+        <receiver
+            android:name=".receivers.onStartServiceReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="co.edu.udea.compumovil.gr05_20172.lab1.BOOT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="co.edu.udea.compumovil.gr05_20172.lab1.services.updateService">
+        </service>
+
+
+receiver
+
+package co.edu.udea.compumovil.gr05_20172.lab1.receivers;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+import co.edu.udea.compumovil.gr05_20172.lab1.services.updateService;
+
+public class onStartServiceReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        Log.d("TAG", "Se inicio el broadcast");
+
+        Intent service = new Intent(context.getApplicationContext(), updateService.class);
+        context.getApplicationContext().startService(service);
+    }
+}
+
+
+
+profile
+
+package co.edu.udea.compumovil.gr05_20172.lab1;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.MenuView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * to handle interaction events.
+ * Use the {@link PreferencesFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class PreferencesFragment extends Fragment{
+
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
+
+    private boolean session;
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    // private OnFragmentInteractionListener mListener;
+
+    public PreferencesFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PreferencesFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PreferencesFragment newInstance(String param1, String param2) {
+        PreferencesFragment fragment = new PreferencesFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+        mPreferences = getActivity().getSharedPreferences("DATOS", 0);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment}
+
+        View view= inflater.inflate(R.layout.fragment_preferences, container, false);
+
+        Switch sw = ((Switch)view.findViewById(R.id.mantenerSesion));
+
+        session = mPreferences.getBoolean("session", true);
+        if(session){
+            sw.setChecked(true);
+        }else{
+            sw.setChecked(false);
+        }
+
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                mEditor = mPreferences.edit();
+                mEditor.putBoolean("session", b);
+                mEditor.commit();
+            }
+        });
+
+        TextView textView = ((TextView)view.findViewById(R.id.updateProfile));
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), UpdateProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        return view;
+    }
+
+
+}
