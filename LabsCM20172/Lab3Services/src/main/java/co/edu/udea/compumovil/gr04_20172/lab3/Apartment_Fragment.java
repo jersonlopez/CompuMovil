@@ -222,7 +222,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                                 imageView.buildDrawingCache();
                                 bitmap = imageView.getDrawingCache();*/
 
-                                try {
+                                /*try {
                                     bitmap=Glide.with(Apartment_Fragment.this)
                                             .load(URL_CONTAINER_DOWN.concat(ubi).concat(apartment[i].getPhotoapartment())).asBitmap()
                                             .into(100,100)
@@ -234,9 +234,9 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                                     e.printStackTrace();
                                 } catch (ExecutionException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
 
-                                apartments.add(new Apartment(bitmap, textType, textPrice, textArea, textShort, textUbication, id));
+                                apartments.add(new Apartment(textType, textPrice, textArea, textShort, textUbication, id));
 
                                 /*ContentValues values1= new ContentValues();
                                 ContentValues values2= new ContentValues();

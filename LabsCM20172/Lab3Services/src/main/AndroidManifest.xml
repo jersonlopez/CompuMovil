@@ -48,6 +48,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <action android:name="co.edu.udea.compumovil.gr04_20172.lab3.BOOT" />
             </intent-filter>
         </receiver>
 
@@ -55,6 +57,7 @@
             android:name=".UpdateDB"
             android:enabled="true"
             android:exported="true"></service>
+
     </application>
 
 </manifest>
