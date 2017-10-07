@@ -244,6 +244,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                         Apartment apartment = new Gson().fromJson(response, Apartment.class);
 
                         String nombre = apartment.getId()+apartment.getPhotoapartment(); //Nommbre de la imagen
+                        nombre = nombre.replace(" ","");
+                        nombre = nombre.replace("#","");
+                        nombre = nombre.replace("-","");
                         sendImage(URL_CONTAINER_UP,nombre); //Subimos la imagen
                     }
                 },

@@ -64,7 +64,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     SQLiteDatabase db;
     byte[] blob;
     int id = 0;
-    Bitmap bitmap;
+    Bitmap bitmap, photo;
     ImageView imageView;
     private OnFragmentButtonListener mListener;
 
@@ -88,7 +88,8 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_apartment, container, false);
         apartments = new ArrayList<>();
-        imageView = v.findViewById(R.id.apartment_photo);
+        View v1 = inflater.inflate(R.layout.card_view, container, false);
+        imageView = v1.findViewById(R.id.apartment_photo);
 
         /*String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
@@ -211,16 +212,19 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                                 Log.d("@@@", textType+"_"+textPrice+"-"+textArea+"_"+textUbication);
                                 //Toast.makeText(getActivity(), textubication, Toast.LENGTH_SHORT).show();
 
+                                String ubi = textUbication.replace(" ","");
+                                ubi =ubi.replace("#","");
+                                ubi =ubi.replace("-","");
                                 /*Glide.with(Apartment_Fragment.this)
-                                        .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment[i].getId())).concat(apartment[i].getPhotoapartment()))
+                                        .load(URL_CONTAINER_DOWN.concat(ubi).concat(apartment[i].getPhotoapartment())).asBitmap()
                                         .into(imageView);
 
                                 imageView.buildDrawingCache();
                                 bitmap = imageView.getDrawingCache();*/
-                                /*try {
+
+                                try {
                                     bitmap=Glide.with(Apartment_Fragment.this)
-                                            .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment[i].getId())).concat(apartment[i].getPhotoapartment()))
-                                            .asBitmap()
+                                            .load(URL_CONTAINER_DOWN.concat(ubi).concat(apartment[i].getPhotoapartment())).asBitmap()
                                             .into(100,100)
                                             .get();
                                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -230,11 +234,11 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                                     e.printStackTrace();
                                 } catch (ExecutionException e) {
                                     e.printStackTrace();
-                                }*/
+                                }
 
-                                apartments.add(new Apartment(textType, textPrice, textArea, textShort, textUbication, id));
+                                apartments.add(new Apartment(bitmap, textType, textPrice, textArea, textShort, textUbication, id));
 
-                                ContentValues values1= new ContentValues();
+                                /*ContentValues values1= new ContentValues();
                                 ContentValues values2= new ContentValues();
                                 values2.put(ApartmentsDB.ColumnApartment.ubicationApartment, textUbication);
                                 values2.put(ApartmentsDB.ColumnApartment.typeApartment, textType);
