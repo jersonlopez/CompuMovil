@@ -9,6 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+
 
 /**
  * Created by dairo.garcia on 5/10/17.
@@ -64,5 +66,8 @@ public class VolleySingleton {
 
     public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+
+    public void addToRequestQueue(JSONArray jsonArray) {
     }
 }

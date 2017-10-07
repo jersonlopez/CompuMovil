@@ -1,6 +1,7 @@
 package co.edu.udea.compumovil.gr04_20172.lab3;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +25,17 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -82,7 +88,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_apartment, container, false);
         apartments = new ArrayList<>();
-
+        imageView = v.findViewById(R.id.apartment_photo);
 
         /*String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
@@ -176,6 +182,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         void onFragmentClickButton(int id);
     }
 
+
     private void getApartment() {
         /*String id_Apartment = eUbication.getText().toString();
         if ("".equals(id_Apartment)){
@@ -183,31 +190,83 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             return;
         }*/
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL_APARTMENTS, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response){
+                    public void onResponse(JSONArray response){
                         Apartment[] apartment = new Gson().fromJson(response.toString(), Apartment[].class);
 
                         if (apartment != null){
                             for (int i = 0; i < apartment.length ; i++){
-                                String textType = apartment[i].getType();
-                                String textPrice = apartment[i].getPrice();
-                                String textArea = apartment[i].getArea();
+                                String textLarge = apartment[i].getLargedescriptionapartment();
+                                String textType = apartment[i].getTypeapartment();
+                                String textPrice = apartment[i].getPriceapartment();
+                                String textArea = apartment[i].getAreaapartment();
                                 String textShort = apartment[i].getShortdescriptionapartment();
-                                String textubication = apartment[i].getId();
+                                String textUbication = apartment[i].getId();
+                                String textRooms = apartment[i].getRoomsapartment();
 
-                                Glide.with(Apartment_Fragment.this)
+                                Log.d("@@@", textType+"_"+textPrice+"-"+textArea+"_"+textUbication);
+                                //Toast.makeText(getActivity(), textubication, Toast.LENGTH_SHORT).show();
+
+                                /*Glide.with(Apartment_Fragment.this)
                                         .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment[i].getId())).concat(apartment[i].getPhotoapartment()))
                                         .into(imageView);
 
                                 imageView.buildDrawingCache();
-                                bitmap = imageView.getDrawingCache();
+                                bitmap = imageView.getDrawingCache();*/
+                                /*try {
+                                    bitmap=Glide.with(Apartment_Fragment.this)
+                                            .load(URL_CONTAINER_DOWN.concat(String.valueOf(apartment[i].getId())).concat(apartment[i].getPhotoapartment()))
+                                            .asBitmap()
+                                            .into(100,100)
+                                            .get();
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
+                                    blob=baos.toByteArray();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }*/
 
-                                apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                                apartments.add(new Apartment(textType, textPrice, textArea, textShort, textUbication, id));
+
+                                ContentValues values1= new ContentValues();
+                                ContentValues values2= new ContentValues();
+                                values2.put(ApartmentsDB.ColumnApartment.ubicationApartment, textUbication);
+                                values2.put(ApartmentsDB.ColumnApartment.typeApartment, textType);
+                                values2.put(ApartmentsDB.ColumnApartment.priceApartment, textPrice);
+                                values2.put(ApartmentsDB.ColumnApartment.areaApartment, textArea);
+                                values2.put(ApartmentsDB.ColumnApartment.roomsApartment, textRooms);
+                                values2.put(ApartmentsDB.ColumnApartment.ShortDescriptionApartment, textShort);
+                                values2.put(ApartmentsDB.ColumnApartment.LargeDescriptionApartment, textLarge);
+                                db.insertWithOnConflict(ApartmentsDB.entityApartment, null, values2, SQLiteDatabase.CONFLICT_IGNORE);
+
+                                String consulta="select "+ ApartmentsDB.ColumnApartment.ubicationApartment +" from " +ApartmentsDB.entityApartment+ " where " + ApartmentsDB.ColumnApartment.typeApartment+"="+ "\"" + textType + "\"" +
+                                        " and "+ApartmentsDB.ColumnApartment.priceApartment+"=" + "\"" + textPrice + "\"" + " and "+ApartmentsDB.ColumnApartment.roomsApartment+"=" + "\"" + textRooms + "\"" +
+                                        " and "+ApartmentsDB.ColumnApartment.areaApartment+"=" + "\"" + textArea + "\"" + " and "+ApartmentsDB.ColumnApartment.ubicationApartment+"=" + "\"" +
+                                        textUbication + "\"";
+                                Cursor cursor3=db.rawQuery(consulta,null);
+
+                                cursor3.moveToFirst();
+                                String ubication = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
+
+                                Toast.makeText(getActivity(), "ubi "+ ubication, Toast.LENGTH_SHORT).show();
+                                /*if(cursor3.moveToNext()){
+                                    values1.put(ApartmentsDB.ColumnResource.photo, blob);
+                                    values1.put(ApartmentsDB.ColumnResource.ubicationApartment, textUbication);
+                                    db.insertWithOnConflict(ApartmentsDB.entityResource,null,values1,SQLiteDatabase.CONFLICT_IGNORE);
+                                }*/
+
+
                             }
+                            llm = new LinearLayoutManager(getActivity());
+                            rv.setLayoutManager(llm);
+                            adapter = new RVAdapter(apartments);
+                            rv.setAdapter(adapter);
                         }
 
                     }
@@ -216,12 +275,11 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), "Error consultando información", Toast.LENGTH_SHORT).show();
-                        //Log.d("nada2",error.getMessage());
+                        Log.d("nada2",error.getMessage());
                     }
                 }
         );
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
     }
-
 
 }
