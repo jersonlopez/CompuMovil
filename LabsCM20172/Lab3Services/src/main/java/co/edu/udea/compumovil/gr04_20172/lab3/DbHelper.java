@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         //Tabla user
 
-       String sqlUser = String
+       /*String sqlUser = String
                 .format("create table %s (%s text primary key, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s text, %s blob)",
                         ApartmentsDB.entityUser,
                         ApartmentsDB.ColumnUser.email,
@@ -41,7 +41,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         );
                 //Sentencia para crear tabla
         Log.d(TAG, "onCreate with SQL: " + sqlUser);
-        db.execSQL(sqlUser); //Ejecución de la sentencia
+        db.execSQL(sqlUser); //Ejecución de la sentencia*/
 
         //Tabla de Apartment
 

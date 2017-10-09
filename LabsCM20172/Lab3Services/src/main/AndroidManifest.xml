@@ -48,13 +48,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <action android:name="co.edu.udea.compumovil.gr04_20172.lab3.BOOT" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".UpdateDB"
-            android:enabled="true"
-            android:exported="true"></service>
+        <service android:name=".UpdateDB" android:enabled="true"/>
+        <service android:name=".ImageService" android:enabled="true" android:exported="false"/>
+
     </application>
 
 </manifest>

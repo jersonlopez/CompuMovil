@@ -17,7 +17,8 @@
         android:defaultValue="true"
         android:key="swicthSession"
         android:summary="evitar loguearse cada vez que se abra la app"
-        android:title="Mantener sesion iniciada" />
+        android:title="Mantener sesion iniciada"
+        android:switchTextOn="on"/>
 
 
     <PreferenceCategory app:title="Opciones">

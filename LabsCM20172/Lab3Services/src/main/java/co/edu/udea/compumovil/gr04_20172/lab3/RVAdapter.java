@@ -1,14 +1,23 @@
 package co.edu.udea.compumovil.gr04_20172.lab3;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -17,8 +26,19 @@ import java.util.ArrayList;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolder> implements View.OnClickListener{
 
+    // LINK DEL SERIVDOR
+    private final String HOST_CODE = "https://ensuenoservices-jersonlopez.c9users.io";
+
+    // COMPLEMENTOS
+    private final String URL_CONTAINER_DOWN_COMPLEMENT = ":8080/api/Containers/all/download/";
+
+    private final String URL_CONTAINER_DOWN = HOST_CODE.concat(URL_CONTAINER_DOWN_COMPLEMENT);
+
     private View.OnClickListener listener;
     private ArrayList<Apartment> apartments;
+    ImageView photov;
+    String ubi, url, foto;
+
     @Override
     public ApartmentViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
@@ -34,16 +54,42 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         holder.apartmentValue.setText("1'200.000");
         holder.apartmentArea.setText("150 m2");*
         holder.apartmentDescriptionShort.setText("casa grande, bien ubicada...");*/
-        holder.photov.setImageResource(R.drawable.ic_menu_signoff);
+        //holder.photov.setImageResource(R.drawable.ic_menu_signoff);
         holder.apartmentType.setText(apartments.get(position).getType());
         holder.apartmentValue.setText(apartments.get(position).getPrice());
         holder.apartmentArea.setText(apartments.get(position).getArea());
         holder.apartmentDescriptionShort.setText(apartments.get(position).getDescription());
-        //holder.photov.setImageBitmap(apartments.get(position).getPhoto());
+        holder.photo.setImageBitmap(apartments.get(position).getPhoto());
         /*byte[] blob = apartments.get(position).getPhoto();
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
         */
+        ubi = apartments.get(position).getUbitacion().replace(" ", "");
+        ubi = ubi.replace("#", "");
+        ubi = ubi.replace("-", "");
+        url = URL_CONTAINER_DOWN.concat(ubi).concat("img.png");
+        Log.d("$$$", url);
+        /*new Thread(new Runnable() {
+            private Bitmap loadImageFromNetwork(String url) {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+                    return bitmap;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            public void run() {
+                final Bitmap bitmap = loadImageFromNetwork(url);
+                photov.post(new Runnable() {
+                    public void run() {
+                        photov.setImageBitmap(bitmap);
+                    }
+                });
+            }
+        }).start();*/
     }
+
 
 
     @Override
@@ -88,7 +134,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         TextView apartmentValue;
         TextView apartmentArea;
         TextView apartmentDescriptionShort;
-        ImageView photov;
+        ImageView photo;
+
         LinearLayout ly;
 
         public ApartmentViewHolder(View itemView) {
@@ -110,6 +157,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
             apartmentArea = (TextView)itemView.findViewById(R.id.apartment_area);
             apartmentDescriptionShort = (TextView)itemView.findViewById(R.id.apartment_description_short);
             photov = (ImageView)itemView.findViewById(R.id.apartment_photo);
+            photo = (ImageView)itemView.findViewById(R.id.apartment_photo);
 
         }
 
