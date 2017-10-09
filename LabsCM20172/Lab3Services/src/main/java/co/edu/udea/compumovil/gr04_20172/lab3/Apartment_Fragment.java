@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -64,8 +67,9 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     SQLiteDatabase db;
     byte[] blob;
     int id = 0;
-    Bitmap bitmap, photo;
+    Bitmap bitmap = null, photo;
     ImageView imageView;
+    String ubi, foto, url;
     private OnFragmentButtonListener mListener;
 
 
@@ -78,7 +82,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
-        getApartment();
+        //getApartment();
     }
 
 
@@ -91,7 +95,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         View v1 = inflater.inflate(R.layout.card_view, container, false);
         imageView = v1.findViewById(R.id.apartment_photo);
 
-        /*String consulta = "select * from " + ApartmentsDB.entityApartment;
+        String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
 
         while (cursor.moveToNext()) {
@@ -101,7 +105,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             String textArea = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment));
             String textShort = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ShortDescriptionApartment));
             String textubication = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
-
+            //Toast.makeText(getActivity(),"@@@" +textubication, Toast.LENGTH_SHORT).show();
             String consulta1 = "select * from " + ApartmentsDB.entityResource+" where "+ApartmentsDB.ColumnResource.ubicationApartment + "="+ "\"" +
                     textubication.toString()+ "\"" ;
             Cursor cursor1 = db.rawQuery(consulta1, null);
@@ -120,7 +124,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
             }
 
-        }*/
+        }
 
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -212,31 +216,40 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                                 Log.d("@@@", textType+"_"+textPrice+"-"+textArea+"_"+textUbication);
                                 //Toast.makeText(getActivity(), textubication, Toast.LENGTH_SHORT).show();
 
-                                String ubi = textUbication.replace(" ","");
+                                ubi = textUbication.replace(" ","");
                                 ubi =ubi.replace("#","");
                                 ubi =ubi.replace("-","");
-                                /*Glide.with(Apartment_Fragment.this)
-                                        .load(URL_CONTAINER_DOWN.concat(ubi).concat(apartment[i].getPhotoapartment())).asBitmap()
-                                        .into(imageView);
+                                foto = apartment[i].getPhotoapartment();
+                                url = URL_CONTAINER_DOWN.concat(ubi).concat(foto);
 
-                                imageView.buildDrawingCache();
-                                bitmap = imageView.getDrawingCache();*/
+                                new Thread(new Runnable() {
+                                    @Nullable
+                                    private Bitmap loadImageFromNetwork(String url) {
+                                        try {
+                                            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+                                            return bitmap;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
 
-                                /*try {
-                                    bitmap=Glide.with(Apartment_Fragment.this)
-                                            .load(URL_CONTAINER_DOWN.concat(ubi).concat(apartment[i].getPhotoapartment())).asBitmap()
-                                            .into(100,100)
-                                            .get();
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
-                                    blob=baos.toByteArray();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                }*/
+                                    public void run() {
+                                        final Bitmap bitmap = loadImageFromNetwork(url);
+                                        imageView.post(new Runnable() {
+                                            public void run() {
+                                                imageView.setImageBitmap(bitmap);
+                                            }
+                                        });
+                                    }
+                                }).start();
 
-                                apartments.add(new Apartment(textType, textPrice, textArea, textShort, textUbication, id));
+                                bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                blob = baos.toByteArray();
+
+                                apartments.add(new Apartment(bitmap, textType, textPrice, textArea, textShort, textUbication, id));
 
                                 /*ContentValues values1= new ContentValues();
                                 ContentValues values2= new ContentValues();

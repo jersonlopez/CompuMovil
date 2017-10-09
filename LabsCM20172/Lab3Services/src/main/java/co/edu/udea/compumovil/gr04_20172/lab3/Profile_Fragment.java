@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class Profile_Fragment extends Fragment {
     TextView nameProfile=null, lastnameProfile=null, emailProfile=null, genderProfile=null, phoneProfile=null;
     ImageView photo;
     Bitmap bitmap;
+    SwitchPreference sw;
 
 
     public Profile_Fragment() {
@@ -61,6 +63,8 @@ public class Profile_Fragment extends Fragment {
         DbHelper dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
         email = getActivity().getIntent().getStringExtra("email");
+        addPreferencesFromResource(R.xml.settings);
+        //sw = (SwitchPreference)addPreferencesFromResource();
         getCustomer();
         //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
         /*String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.userName +", "+ApartmentsDB.ColumnUser.userLastName
@@ -75,6 +79,11 @@ public class Profile_Fragment extends Fragment {
             Toast.makeText(getActivity(), "Vacio", Toast.LENGTH_SHORT).show();
         }*/
     }
+
+    private void addPreferencesFromResource(int settings) {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

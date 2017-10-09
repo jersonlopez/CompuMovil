@@ -53,10 +53,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".UpdateDB"
-            android:enabled="true"
-            android:exported="true"></service>
+        <service android:name=".UpdateDB" android:enabled="true"/>
+        <service android:name=".ImageService" android:enabled="true" android:exported="false"/>
 
     </application>
 

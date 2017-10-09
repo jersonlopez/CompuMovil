@@ -3,6 +3,7 @@ package co.edu.udea.compumovil.gr04_20172.lab3;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 /**
@@ -10,6 +11,8 @@ import android.support.v7.preference.PreferenceFragmentCompat;
  */
 
 public class SettingsScreen extends PreferenceFragmentCompat {
+
+    SwitchPreference sw;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
