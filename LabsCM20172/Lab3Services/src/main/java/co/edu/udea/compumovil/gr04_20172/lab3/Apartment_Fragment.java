@@ -69,7 +69,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     int id = 0;
     Bitmap bitmap = null, photo;
     ImageView imageView;
-    String ubi, foto, url;
+    String ubi, foto, url, email;
     private OnFragmentButtonListener mListener;
 
 
@@ -82,6 +82,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         dbHelper = new DbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
+        email = getActivity().getIntent().getStringExtra("email");
         //getApartment();
     }
 
@@ -94,6 +95,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         apartments = new ArrayList<>();
         View v1 = inflater.inflate(R.layout.card_view, container, false);
         imageView = v1.findViewById(R.id.apartment_photo);
+        apartments.clear();
 
         String consulta = "select * from " + ApartmentsDB.entityApartment;
         Cursor cursor = db.rawQuery(consulta, null);
@@ -133,7 +135,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intentToAdd = new Intent(getActivity(), Add_Apartment_Activity.class);
-                intentToAdd.putExtra("email", ApartmentsDB.ColumnUser.email);
+                intentToAdd.putExtra("email", email);
                 getActivity().startActivity(intentToAdd);
             }
         });

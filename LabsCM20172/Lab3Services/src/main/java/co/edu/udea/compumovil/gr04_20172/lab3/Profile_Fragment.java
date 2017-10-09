@@ -42,7 +42,6 @@ public class Profile_Fragment extends Fragment {
     private final String URL_CUSTOMERS = HOST_CODE.concat(URL_CUSTOMERS_COMPLEMENT);
     private final String URL_CONTAINER_DOWN = HOST_CODE.concat(URL_CONTAINER_DOWN_COMPLEMENT);
 
-    SQLiteDatabase db;
     Context context;
     String email;
     Cursor cursor;
@@ -60,24 +59,10 @@ public class Profile_Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DbHelper dbHelper = new DbHelper(getActivity());
-        db = dbHelper.getWritableDatabase();
         email = getActivity().getIntent().getStringExtra("email");
-        addPreferencesFromResource(R.xml.settings);
-        //sw = (SwitchPreference)addPreferencesFromResource();
         getCustomer();
         //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
-        /*String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.userName +", "+ApartmentsDB.ColumnUser.userLastName
-                +", "+ApartmentsDB.ColumnUser.gender+", "+ApartmentsDB.ColumnUser.numberPhone+ ", " + ApartmentsDB.ColumnUser.photo+" from " + ApartmentsDB.entityUser +" where " +ApartmentsDB.ColumnUser.email + "="+ "\"" +
-                email + "\"" ;
-        //Toast.makeText(getActivity(),consulta, Toast.LENGTH_SHORT).show();
-        cursor = db.rawQuery(consulta,null);
 
-        if (cursor.moveToNext()){
-           // Toast.makeText(getActivity(),cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)),Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(getActivity(), "Vacio", Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     private void addPreferencesFromResource(int settings) {
@@ -94,14 +79,6 @@ public class Profile_Fragment extends Fragment {
         genderProfile = v.findViewById(R.id.textViewGender);
         phoneProfile = v.findViewById(R.id.textViewNumberphoneProfile);
         photo = v.findViewById(R.id.imageViewProfile);
-        /*nameProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.userName)).toString());
-        lastnameProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.userLastName)).toString());
-        emailProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)).toString());
-        genderProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)).toString());
-        phoneProfile.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.numberPhone)).toString());
-        byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnUser.photo));
-        bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-        photo.setImageBitmap(bitmap);*/
         //Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
         return v;
     }
@@ -126,11 +103,6 @@ public class Profile_Fragment extends Fragment {
                         emailProfile.setText(customer.getId());
                         genderProfile.setText(customer.getGender());
                         phoneProfile.setText(customer.getNumberphone());
-
-                        /*String prueba = customer.getId();
-                        String prueba1 = customer.getPassword();
-                        Toast.makeText(getActivity(), prueba, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getActivity(), prueba1, Toast.LENGTH_SHORT).show();*/
 
                         Glide.with(Profile_Fragment.this)
                                 .load(URL_CONTAINER_DOWN.concat(String.valueOf(customer.getId())).concat(customer.getPhoto()))

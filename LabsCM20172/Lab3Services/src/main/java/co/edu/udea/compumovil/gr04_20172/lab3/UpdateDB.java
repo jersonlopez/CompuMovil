@@ -65,7 +65,7 @@ public class UpdateDB extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Servicio creado", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Servicio creado", Toast.LENGTH_LONG).show();
         Log.d("###", "Servicio creado");
     }
 
@@ -103,13 +103,14 @@ public class UpdateDB extends Service {
 
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, 180000);
+        timer.scheduleAtFixedRate(timerTask, 0, 60000);
         return START_NOT_STICKY;
     }
 
     private void getApartment() {
         dbHelper = new DbHelper(getApplicationContext());
         db = dbHelper.getWritableDatabase();
+        //dbHelper.onUpgrade(db,1,2);
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL_APARTMENTS, null,
@@ -130,26 +131,37 @@ public class UpdateDB extends Service {
 
                                 Log.d("@@@", textType + "_" + textPrice + "-" + textArea + "_" + textUbication);
                                 //Toast.makeText(getActivity(), textubication, Toast.LENGTH_SHORT).show();
+                                String consulta = "select * from " + ApartmentsDB.entityApartment;
+                                Cursor cursor = db.rawQuery(consulta, null);
 
-                                ubi = textUbication.replace(" ", "");
-                                ubi = ubi.replace("#", "");
-                                ubi = ubi.replace("-", "");
-                                foto = apartment[i].getPhotoapartment();
-                                url = URL_CONTAINER_DOWN.concat(ubi).concat(foto);
+                                boolean b = true;
 
-                                ContentValues values2 = new ContentValues();
-                                values2.put(ApartmentsDB.ColumnApartment.ubicationApartment, textUbication);
-                                values2.put(ApartmentsDB.ColumnApartment.typeApartment, textType);
-                                values2.put(ApartmentsDB.ColumnApartment.priceApartment, textPrice);
-                                values2.put(ApartmentsDB.ColumnApartment.areaApartment, textArea);
-                                values2.put(ApartmentsDB.ColumnApartment.roomsApartment, textRooms);
-                                values2.put(ApartmentsDB.ColumnApartment.ShortDescriptionApartment, textShort);
-                                values2.put(ApartmentsDB.ColumnApartment.LargeDescriptionApartment, textLarge);
-                                db.insertWithOnConflict(ApartmentsDB.entityApartment, null, values2, SQLiteDatabase.CONFLICT_IGNORE);
+                                while (cursor.moveToNext()) {
+                                    String ubicacion = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
+                                    if (ubicacion.equals(textUbication)){
+                                        b = false;
+                                    }else{
+                                        Log.d("ya", "el apartamento ya esta");
+                                        //Toast.makeText(UpdateDB.this, "ya está", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                                Intent starServiceIntent = new Intent(getApplicationContext(), ImageService.class);
-                                starServiceIntent.putExtra("ubicacion", textUbication);
-                                getApplicationContext().startService(starServiceIntent);
+                                if (b) {
+                                    Log.d("ya", "voy a agregar apartamento");
+                                    ContentValues values2 = new ContentValues();
+                                    values2.put(ApartmentsDB.ColumnApartment.ubicationApartment, textUbication);
+                                    values2.put(ApartmentsDB.ColumnApartment.typeApartment, textType);
+                                    values2.put(ApartmentsDB.ColumnApartment.priceApartment, textPrice);
+                                    values2.put(ApartmentsDB.ColumnApartment.areaApartment, textArea);
+                                    values2.put(ApartmentsDB.ColumnApartment.roomsApartment, textRooms);
+                                    values2.put(ApartmentsDB.ColumnApartment.ShortDescriptionApartment, textShort);
+                                    values2.put(ApartmentsDB.ColumnApartment.LargeDescriptionApartment, textLarge);
+                                    db.insertWithOnConflict(ApartmentsDB.entityApartment, null, values2, SQLiteDatabase.CONFLICT_IGNORE);
+
+                                    Intent starServiceIntent = new Intent(getApplicationContext(), ImageService.class);
+                                    starServiceIntent.putExtra("ubicacion", textUbication);
+                                    getApplicationContext().startService(starServiceIntent);
+                                }
 
                                 /*String consulta = "select " + ApartmentsDB.ColumnApartment.ubicationApartment + " from " + ApartmentsDB.entityApartment + " where " + ApartmentsDB.ColumnApartment.typeApartment + "=" + "\"" + textType + "\"" +
                                         " and " + ApartmentsDB.ColumnApartment.priceApartment + "=" + "\"" + textPrice + "\"" + " and " + ApartmentsDB.ColumnApartment.roomsApartment + "=" + "\"" + textRooms + "\"" +
