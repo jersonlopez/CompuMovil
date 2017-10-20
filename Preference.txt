@@ -1,3 +1,5 @@
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -list -v -storepass android
+
 Splas,------------------
 
 package co.edu.udea.compumovil.gr05_20172.lab1;
