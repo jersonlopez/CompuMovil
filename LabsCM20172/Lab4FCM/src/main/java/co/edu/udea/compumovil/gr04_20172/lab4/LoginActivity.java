@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +34,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
         Starting = (Button)findViewById(R.id.buttonLogin);
         Register = (Button)findViewById(R.id.buttonLogUp);
         email = (EditText) findViewById(R.id.editTextEmailLogin);
@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Register.setOnClickListener(this);
         //dbHelper = new DbHelper(this);
         //db= dbHelper.getWritableDatabase();
+
+        mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // ...
             }
         };
+
 
     }
 
@@ -83,30 +86,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.buttonLogin:
                 Log.d("TAG","hola");
+                final String id_Customer = email.getText().toString();
+                String pass_Customer = password.getText().toString();
+                if ("".equals(id_Customer)) {
+                    Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if ("".equals(pass_Customer)) {
+                    Toast.makeText(this, "Ingrese una contraseña", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mAuth.signInWithEmailAndPassword(id_Customer, pass_Customer)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                Toast.makeText(getApplicationContext(),"Login exitoso",Toast.LENGTH_SHORT).show();
-                Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class);
-                //intentNavigation.putExtra("email",cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                //Toast.makeText(getApplicationContext(),cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)),Toast.LENGTH_SHORT).show();
-                startActivity(intentNavigation);
-                finish();
+                                Toast.makeText(getApplicationContext(),"Login exitoso",Toast.LENGTH_SHORT).show();
+                                Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intentNavigation.putExtra("email", id_Customer);
+                                Toast.makeText(getApplicationContext(), id_Customer,Toast.LENGTH_SHORT).show();
+                                startActivity(intentNavigation);
+                                finish();
+                                if (!task.isSuccessful()) {
+                                    Log.w("TAG", "signInWithEmail:failed", task.getException());
+                                }
 
-                /*String consulta = "select " + ApartmentsDB.ColumnUser.email + ", " + ApartmentsDB.ColumnUser.password + " from " + ApartmentsDB.entityUser +" where " +ApartmentsDB.ColumnUser.email + "="+ "\"" +
-                        email.getText().toString() + "\"" +"and User.password=" + "\"" + password.getText().toString() + "\"";
-                //Toast.makeText(getApplicationContext(),consulta.toString(), Toast.LENGTH_SHORT).show();
-                    Cursor cursor=db.rawQuery(consulta,null);
+                            }
+                        });
 
-                    if (cursor.moveToNext() != false ){
-                    Toast.makeText(getApplicationContext(),"Login exitoso",Toast.LENGTH_SHORT).show();
-                        Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class);
-                        intentNavigation.putExtra("email",cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                        //Toast.makeText(getApplicationContext(),cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)),Toast.LENGTH_SHORT).show();
-                        startActivity(intentNavigation);
-                        finish();
-                    }else{
-                        Toast.makeText(getApplicationContext(),"Correo o contraseña incorrectos",Toast.LENGTH_SHORT).show();
 
-                    }*/
                 break;
 
             case R.id.buttonLogUp:
