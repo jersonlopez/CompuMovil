@@ -137,10 +137,10 @@ public class Navigation_Drawer extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentClickButton(int id) {
+    public void onFragmentClickButton(String id) {
         fragment=new FragmentDetail();
         Bundle bundle=new Bundle();
-        bundle.putInt("id",id);
+        bundle.putString("id",id);
         fragment.setArguments(bundle);
         FragmentManager fragmentManager=getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();

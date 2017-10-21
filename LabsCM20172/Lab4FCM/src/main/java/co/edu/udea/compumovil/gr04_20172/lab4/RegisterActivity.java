@@ -179,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public void Register(){
 
-        String route = "images/".concat(textEmail.concat("img.png"));
+        String route = "user/".concat(textEmail.concat("img.png"));
 
         Customer user = new Customer(textEmail, textName, textLastname, textBorn, textDirection, textPassword, textPhone, textGender, textCity, route);
 

@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.buttonLogin:
                 Log.d("TAG","hola");
                 final String id_Customer = email.getText().toString();
-                String pass_Customer = password.getText().toString();
+                final String pass_Customer = password.getText().toString();
                 if ("".equals(id_Customer)) {
                     Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show();
                     return;
@@ -96,24 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this, "Ingrese una contraseña", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mAuth.signInWithEmailAndPassword(id_Customer, pass_Customer)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                                Toast.makeText(getApplicationContext(),"Login exitoso",Toast.LENGTH_SHORT).show();
-                                Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intentNavigation.putExtra("email", id_Customer);
-                                Toast.makeText(getApplicationContext(), id_Customer,Toast.LENGTH_SHORT).show();
-                                startActivity(intentNavigation);
-                                finish();
-                                if (!task.isSuccessful()) {
-                                    Log.w("TAG", "signInWithEmail:failed", task.getException());
-                                }
-
-                            }
-                        });
+                Login(id_Customer, pass_Customer);
 
 
                 break;
@@ -123,6 +106,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent1);
         }
+    }
+
+    public void Login(final String user, String pass){
+        mAuth.signInWithEmailAndPassword(user, pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                        if(task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
+                            Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intentNavigation.putExtra("email", user);
+                            Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
+                            startActivity(intentNavigation);
+                            finish();
+                        } else{
+                            Toast.makeText(getApplicationContext(), "Usuario invalido", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
 }
 

@@ -89,7 +89,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
                 id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.id));
                 bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-                apartments.add(new Apartment(bitmap,textType, textPrice, textArea, textShort, textubication, id));
+                apartments.add(new Apartment("soy la foto",textType, textPrice, textArea, textShort, textubication, "hola a todos"));
 
                 //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                 //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
@@ -121,7 +121,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int id = adapter.getItem(rv.getChildAdapterPosition(view)).getId();
+                String id = adapter.getItem(rv.getChildAdapterPosition(view)).getUbitacion();
                 //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                 if(mListener!=null)
                 {
@@ -160,7 +160,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     }
 
     public interface OnFragmentButtonListener{
-        void onFragmentClickButton(int id);
+        void onFragmentClickButton(String id);
     }
 
 }

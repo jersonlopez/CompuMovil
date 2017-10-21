@@ -14,20 +14,20 @@ public class Apartment {
     String type;
     String price;
     String area;
-    String description;
+    String shortDescription;
+    String largeDescription;
     String ubication;
-    Bitmap photo;
-    int id;
+    String photo;
 
 
-    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
+    Apartment(String photo, String type, String price, String area, String shortDescription, String ubication, String largeDescription) {
         this.photo = photo;
         this.type = type;
         this.price = price;
         this.area = area;
-        this.description = description;
+        this.shortDescription= shortDescription;
         this.ubication = ubication;
-        this.id = id;
+        this.largeDescription = largeDescription;
 
     }
 
@@ -55,19 +55,19 @@ public class Apartment {
         this.area = area;
     }
 
-    public String getDescription() {
-        return description;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
-    public Bitmap getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Bitmap photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
@@ -79,12 +79,12 @@ public class Apartment {
         this.type = ubication;
     }
 
-    public int getId() {
-        return id;
+    public String getLargeDescription() {
+        return largeDescription;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setLargeDescription(String largeDescription) {
+        this.largeDescription = largeDescription;
     }
 }
 
