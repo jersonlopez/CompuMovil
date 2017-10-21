@@ -41,7 +41,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     DbHelper dbHelper;
     SQLiteDatabase db;
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
-    String email;
+    private  String textType, textPrice, textArea, textRooms, textShort, textLarge, texUbication, nombre;
+    private String email;
+    private static String routeDowload;
     Button btnAdd;
     ImageView imageView;
     static final int REQUEST_IMAGE_GET = 101;
@@ -82,13 +84,13 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
 
             case R.id.buttonAdd:
 
-                String textType = eType.getText().toString();
-                String textPrice = ePrice.getText().toString();
-                String textArea = eArea.getText().toString();
-                String textRooms = eRooms.getText().toString();
-                String textShort = eShortDescription.getText().toString();
-                String textLarge = eLargeDescription.getText().toString();
-                String texUbication = eUbication.getText().toString();
+                textType = eType.getText().toString();
+                textPrice = ePrice.getText().toString();
+                textArea = eArea.getText().toString();
+                textRooms = eRooms.getText().toString();
+                textShort = eShortDescription.getText().toString();
+                textLarge = eLargeDescription.getText().toString();
+                texUbication = eUbication.getText().toString();
 
                 if (bitmap==null || textType.equals("") || textPrice.equals("") || textArea.equals("") || textRooms.equals("") || textShort.equals("") || textLarge.equals("") || texUbication.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
@@ -96,14 +98,10 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                 } else{
                     String route = "Apartment/".concat(texUbication.concat("img.png"));
 
-                    Apartment apartment = new Apartment(route, textType, textPrice, textArea, textShort, texUbication, textLarge);
-
-                    String nombre = texUbication; //Nommbre de la imagen
+                    nombre = texUbication; //Nommbre de la imagen
                     nombre = nombre.replace(" ", "");
                     nombre = nombre.replace("#", "");
                     nombre = nombre.replace("-", "");
-
-                    mFireBase.child("Apartment").child(nombre).setValue(apartment);
 
                     StorageReference riversRef = mStorageRef.child(route);
 
@@ -111,9 +109,14 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    // Get a URL to the uploaded content
-                                    //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                    //Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
+                                     //Get a URL to the uploaded content
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    routeDowload = downloadUrl.toString();
+
+                                    Apartment apartment = new Apartment(textArea, textLarge, routeDowload, textPrice, textShort, textType, texUbication);
+
+                                    mFireBase.child("Apartment").child(nombre).setValue(apartment);
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -123,6 +126,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                                     // ...
                                 }
                             });
+
+                    //Toast.makeText(getApplicationContext(), routeDowload, Toast.LENGTH_SHORT).show();
+
                     /*while (cursor.moveToNext()) {
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();

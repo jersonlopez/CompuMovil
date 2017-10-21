@@ -1,5 +1,6 @@
 package co.edu.udea.compumovil.gr04_20172.lab4;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -27,11 +30,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
 
     private View.OnClickListener listener;
     private ArrayList<Apartment> apartments;
+
     @Override
     public ApartmentViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
         v.setOnClickListener(this);
-        ApartmentViewHolder pvh = new ApartmentViewHolder(v);
+        ApartmentViewHolder pvh = new ApartmentViewHolder(v, viewGroup.getContext() );
         return pvh;
     }
 
@@ -47,6 +51,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         holder.apartmentValue.setText(apartments.get(position).getPrice());
         holder.apartmentArea.setText(apartments.get(position).getArea());
         holder.apartmentDescriptionShort.setText(apartments.get(position).getShortDescription());
+        Picasso.with(holder.contexto).load(apartments.get(position).getPhoto()).into(holder.photov);
         //holder.photov.setImageBitmap(apartments.get(position).getPhoto());
         /*byte[] blob = apartments.get(position).getPhoto();
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
@@ -97,9 +102,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
         TextView apartmentArea;
         TextView apartmentDescriptionShort;
         ImageView photov;
+        private Context contexto;
         LinearLayout ly;
 
-        public ApartmentViewHolder(View itemView) {
+        public ApartmentViewHolder(View itemView, Context contexto) {
             super(itemView);
             /*ly = (LinearLayout) itemView.findViewById(R.id.layout);
             ly.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +124,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ApartmentViewHolde
             apartmentArea = (TextView)itemView.findViewById(R.id.apartment_area);
             apartmentDescriptionShort = (TextView)itemView.findViewById(R.id.apartment_description_short);
             photov = (ImageView)itemView.findViewById(R.id.apartment_photo);
+            this.contexto = contexto;
 
         }
 

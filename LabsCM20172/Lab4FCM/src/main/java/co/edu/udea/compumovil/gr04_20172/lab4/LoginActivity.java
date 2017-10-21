@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
                             Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intentNavigation.putExtra("email", user);
-                            Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
                             startActivity(intentNavigation);
                             finish();
                         } else{

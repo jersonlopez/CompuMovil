@@ -23,6 +23,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +44,16 @@ import static co.edu.udea.compumovil.gr04_20172.lab4.ApartmentsDB.ColumnUser.ema
 public class Apartment_Fragment extends Fragment implements View.OnClickListener {
     //private List<Apartment> apartments;
     //private RecyclerView.LayoutManager llm;
+    private FirebaseDatabase database;
+    private DatabaseReference ref;
+    private Apartment apartment;
+
+    FirebaseUser user;
     RecyclerView rv;
     RecyclerView.LayoutManager llm;
     ArrayList<Apartment> apartments;
     FloatingActionButton fab;
     private RVAdapter adapter;
-    DbHelper dbHelper;
-    SQLiteDatabase db;
     byte[] blob;
     int id;
     String email;
@@ -56,9 +68,64 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DbHelper(getActivity());
-        db = dbHelper.getWritableDatabase();
-        email = getActivity().getIntent().getStringExtra("email");
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReference("Apartment");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user != null)
+        {
+            email = user.getEmail();
+        }
+        else
+        {
+            getActivity().finish();
+            Intent toLogin= new Intent(getContext(), LoginActivity.class);
+            startActivity(toLogin);
+        }
+
+        apartments = new ArrayList<>();
+
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                apartment = dataSnapshot.getValue(Apartment.class);
+                Toast.makeText(getActivity(), apartment.getType().toString(), Toast.LENGTH_SHORT).show();
+
+                String textType = apartment.getType();
+                String textPrice = apartment.getPrice();
+                String textArea = apartment.getArea();
+                String textShort = apartment.getShortDescription();
+                String textubication = apartment.getUbitacion();
+                String texPhoto = apartment.getPhoto();
+                String textLarge = apartment.getLargeDescription();
+
+                //apartments.add(new Apartment("soy la foto", textType, textPrice, textArea, textShort, textubication, "hola a todos"));
+                apartments.add(apartment);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         //Toast.makeText(getActivity(), "apart F " + email, Toast.LENGTH_SHORT).show();
     }
 
@@ -68,39 +135,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_apartment, container, false);
-        apartments = new ArrayList<>();
 
-        String consulta = "select * from " + ApartmentsDB.entityApartment;
-        Cursor cursor = db.rawQuery(consulta, null);
-
-        while (cursor.moveToNext()) {
-            //Toast.makeText(getActivity(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment)), Toast.LENGTH_LONG).show();
-            String textType =cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.typeApartment));
-            String textPrice =cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment));
-            String textArea = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment));
-            String textShort = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ShortDescriptionApartment));
-            String textubication = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment));
-
-            String consulta1 = "select * from " + ApartmentsDB.entityResource+" where "+ApartmentsDB.ColumnResource.ubicationApartment + "="+ "\"" +
-                    textubication.toString()+ "\"" ;
-            Cursor cursor1 = db.rawQuery(consulta1, null);
-            if(cursor1.moveToNext())
-            {
-                blob = cursor1.getBlob(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.photo));
-                id = cursor1.getInt(cursor1.getColumnIndex(ApartmentsDB.ColumnResource.id));
-                bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-                apartments.add(new Apartment("soy la foto",textType, textPrice, textArea, textShort, textubication, "hola a todos"));
-
-                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
-                //apartments.add(new Apartment("Finca", "900.000.000", "160 m2", "Es una finca grande, estilo colonial", "villa hermosa"));
-                //photo.setImageBitmap(bitmap);
-                //Toast.makeText(getActivity(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getActivity(),String.valueOf(id), Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getActivity(), "no hay imagen", Toast.LENGTH_SHORT).show();
-            }
-
-        }
 
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

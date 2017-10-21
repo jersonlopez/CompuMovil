@@ -10,17 +10,17 @@ import java.util.List;
  */
 
 public class Apartment {
-    //int photoId;
-    String type;
-    String price;
-    String area;
-    String shortDescription;
-    String largeDescription;
-    String ubication;
-    String photo;
+    private String area;
+    private String largeDescription;
+    private String photo;
+    private String price;
+    private String shortDescription;
+    private String type;
+    private String ubication;
 
 
-    Apartment(String photo, String type, String price, String area, String shortDescription, String ubication, String largeDescription) {
+
+    Apartment( String area, String largeDescription, String photo, String price, String shortDescription, String type, String ubication) {
         this.photo = photo;
         this.type = type;
         this.price = price;
@@ -30,6 +30,8 @@ public class Apartment {
         this.largeDescription = largeDescription;
 
     }
+
+    Apartment(){}
 
     public String getType() {
         return type;
