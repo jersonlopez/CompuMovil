@@ -20,20 +20,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayInputStream;
+
+import static android.R.attr.value;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentDetail extends Fragment implements View.OnClickListener {
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference ref;
+    Apartment value;
+
+
     private CollapsingToolbarLayout toolbar;
-    SQLiteDatabase db;
-    DbHelper dbHelper;
-    String textubication1;
-    Bitmap bitmap;
-    Cursor cursor,cursor2,cursor3;
-    TextView name, type, room, cost,area,ubication,description;
+    String id;
+    TextView type, room, cost,area,ubication,description;
     ImageView image;
     Button map;
 
@@ -46,23 +58,10 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        int id = bundle.getInt("id");
-        String id1 = String.valueOf(id);
-        //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
-        String consulta="select * from "+ ApartmentsDB.entityResource + " where Resource." + ApartmentsDB.ColumnResource.id +"="+id;
-        dbHelper=new DbHelper(getActivity());
-        db=dbHelper.getWritableDatabase();
-        cursor= db.rawQuery(consulta,null);
-
-        if(cursor.moveToNext()) {
-            cursor.moveToFirst();
-            textubication1 = cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnResource.ubicationApartment));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(ApartmentsDB.ColumnResource.photo));
-            bitmap = BitmapFactory.decodeByteArray(blob,0,blob.length);
-            //Toast.makeText(getActivity(),textubication1, Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getActivity(),"no traje nada", Toast.LENGTH_SHORT).show();
-        }
+        id = bundle.getString("id");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ref = firebaseDatabase.getReference("Apartment");
+        //Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -81,29 +80,41 @@ public class FragmentDetail extends Fragment implements View.OnClickListener {
         map = v.findViewById(R.id.map_button);
         map.setOnClickListener(this);
 
+        ref.orderByChild("ubication").equalTo(id).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("Aviso","¿Entró?");
+                value = dataSnapshot.getValue(Apartment.class);
+                toolbar.setTitle(value.getType());
+                type.setText(value.getType());
+                room.setText(String.valueOf(value.getRooms()));
+                cost.setText(value.getPrice());
+                area.setText(value.getArea());
+                ubication.setText(value.getUbication());
+                description.setText(value.getLargeDescription());
+                Picasso.with(getContext()).load(value.getPhoto()).into(image);
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-        String consulta3 = "select * from " + ApartmentsDB.entityApartment+" where "+ApartmentsDB.ColumnApartment.ubicationApartment + "="+ "\"" +
-                textubication1.toString() + "\"";
-        cursor3= db.rawQuery(consulta3,null);
-        if (cursor3.moveToNext()){
-            cursor3.moveToFirst();
+            }
 
-            String textType =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.typeApartment));
-            String textRooms =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.roomsApartment));
-            String textPrice =cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment));
-            String textArea = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.areaApartment));
-            String textLarge = cursor3.getString(cursor3.getColumnIndex(ApartmentsDB.ColumnApartment.LargeDescriptionApartment));
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            toolbar.setTitle(textType);
-            type.setText(textType);
-            room.setText(textRooms);
-            cost.setText(textPrice);
-            area.setText(textArea);
-            ubication.setText(textubication1);
-            description.setText(textLarge);
-            image.setImageBitmap(bitmap);
-        }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         return v;
     }
 

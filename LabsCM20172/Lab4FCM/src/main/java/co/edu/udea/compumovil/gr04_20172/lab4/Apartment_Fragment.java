@@ -89,13 +89,13 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 apartment = dataSnapshot.getValue(Apartment.class);
-                Toast.makeText(getActivity(), apartment.getType().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), apartment.getUbication(), Toast.LENGTH_SHORT).show();
 
                 String textType = apartment.getType();
                 String textPrice = apartment.getPrice();
                 String textArea = apartment.getArea();
                 String textShort = apartment.getShortDescription();
-                String textubication = apartment.getUbitacion();
+                String textubication = apartment.getUbication();
                 String texPhoto = apartment.getPhoto();
                 String textLarge = apartment.getLargeDescription();
 
@@ -133,9 +133,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_apartment, container, false);
-
 
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -156,8 +154,8 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = adapter.getItem(rv.getChildAdapterPosition(view)).getUbitacion();
-                //Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
+                String id = adapter.getItem(rv.getChildAdapterPosition(view)).getUbication();
+                //Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
                 if(mListener!=null)
                 {
                     mListener.onFragmentClickButton(id);

@@ -14,13 +14,14 @@ public class Apartment {
     private String largeDescription;
     private String photo;
     private String price;
+    private String rooms;
     private String shortDescription;
     private String type;
     private String ubication;
 
 
 
-    Apartment( String area, String largeDescription, String photo, String price, String shortDescription, String type, String ubication) {
+    Apartment( String area, String largeDescription, String photo, String price, String rooms, String shortDescription, String type, String ubication) {
         this.photo = photo;
         this.type = type;
         this.price = price;
@@ -28,6 +29,7 @@ public class Apartment {
         this.shortDescription= shortDescription;
         this.ubication = ubication;
         this.largeDescription = largeDescription;
+        this.rooms = rooms;
 
     }
 
@@ -73,13 +75,6 @@ public class Apartment {
         this.photo = photo;
     }
 
-    public String getUbitacion() {
-        return ubication;
-    }
-
-    public void setUbication(String ubication) {
-        this.type = ubication;
-    }
 
     public String getLargeDescription() {
         return largeDescription;
@@ -87,6 +82,22 @@ public class Apartment {
 
     public void setLargeDescription(String largeDescription) {
         this.largeDescription = largeDescription;
+    }
+
+    public String getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(String rooms) {
+        this.rooms = rooms;
+    }
+
+    public String getUbication() {
+        return ubication;
+    }
+
+    public void setUbication(String ubication) {
+        this.ubication = ubication;
     }
 }
 

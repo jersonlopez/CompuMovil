@@ -32,6 +32,8 @@ public class Customer {
         this.photo = photo;
     }
 
+    Customer(){}
+
     public String getId() {
         return Id;
     }

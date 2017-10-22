@@ -1,20 +1,14 @@
 package co.edu.udea.compumovil.gr04_20172.lab4;
 
-import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,10 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 
 public class Add_Apartment_Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,8 +29,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     DatabaseReference mFireBase = FirebaseDatabase.getInstance().getReference();
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
     private Uri uri;
-    DbHelper dbHelper;
-    SQLiteDatabase db;
+
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
     private  String textType, textPrice, textArea, textRooms, textShort, textLarge, texUbication, nombre;
     private String email;
@@ -48,8 +38,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     ImageView imageView;
     static final int REQUEST_IMAGE_GET = 101;
     Bitmap bitmap;
-    ByteArrayOutputStream baos;
-    byte[] blob;
+
 
 
     public Add_Apartment_Activity(){
@@ -59,7 +48,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //email = getIntent().getStringExtra("email");
+        email = getIntent().getStringExtra("email");
         //Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_add__apartment);
         imageView = (ImageView) findViewById(R.id.imageButton);
@@ -73,8 +62,6 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
         eLargeDescription = (EditText) findViewById(R.id.editTextLargeDescription);
         btnAdd = (Button) findViewById(R.id.buttonAdd);
         btnAdd.setOnClickListener(this);
-        dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
-        db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
 
     }
 
@@ -96,15 +83,13 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
                 } else{
-                    String route = "Apartment/".concat(texUbication.concat("img.png"));
-
                     nombre = texUbication; //Nommbre de la imagen
                     nombre = nombre.replace(" ", "");
                     nombre = nombre.replace("#", "");
                     nombre = nombre.replace("-", "");
 
+                    String route = "Apartment/".concat(nombre.concat("img.png"));
                     StorageReference riversRef = mStorageRef.child(route);
-
                     riversRef.putFile(uri)
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
@@ -113,7 +98,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     routeDowload = downloadUrl.toString();
 
-                                    Apartment apartment = new Apartment(textArea, textLarge, routeDowload, textPrice, textShort, textType, texUbication);
+                                    Apartment apartment = new Apartment(textArea, textLarge, routeDowload, textPrice, textRooms, textShort, textType, texUbication);
 
                                     mFireBase.child("Apartment").child(nombre).setValue(apartment);
 
@@ -128,14 +113,9 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                             });
 
                     //Toast.makeText(getApplicationContext(), routeDowload, Toast.LENGTH_SHORT).show();
-
-                    /*while (cursor.moveToNext()) {
-                        Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
-                    }*/
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intentNavigation.putExtra("email",email);
+                    intentNavigation.putExtra("email",email);
                     //Toast.makeText(getApplicationContext(),"cogi el correo "+ email, Toast.LENGTH_SHORT).show();
                     startActivity(intentNavigation);
                     finish();

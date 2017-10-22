@@ -33,8 +33,6 @@ public class Navigation_Drawer extends AppCompatActivity
     Fragment fragment=null;
     Boolean fragmentChoose=false;
     String email;
-    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-    TextView tName, tEmail;
 
 
     @Override

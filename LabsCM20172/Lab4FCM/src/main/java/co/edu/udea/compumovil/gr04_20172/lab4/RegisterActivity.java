@@ -56,12 +56,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     DatabaseReference mFireBase = FirebaseDatabase.getInstance().getReference();
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
     private FirebaseAuth mAuth;
+    private static String routeDowload;
 
     private ImageView myImageView;
     static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
-    DbHelper dbHelper;
-    SQLiteDatabase db;
     Button btnsave;
     private EditText eName, eLastname, eBorn, eDirection, eEmail, ePassword, ecPassword, ePhone, eCity;
     private String textName,textLastname,textBorn,textDirection,textEmail, textPassword, textPhone, textCity;
@@ -95,8 +94,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         eCity = (EditText) findViewById(R.id.editTextCity);
         eBorn.setOnClickListener(this);
         btnsave.setOnClickListener(this);
-        dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
-        db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
         mAuth = FirebaseAuth.getInstance();
 
     }
@@ -180,19 +177,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void Register(){
 
         String route = "user/".concat(textEmail.concat("img.png"));
-
-        Customer user = new Customer(textEmail, textName, textLastname, textBorn, textDirection, textPassword, textPhone, textGender, textCity, route);
-
-        mFireBase.child("Customer").child(textEmail.replace(".", ",")).setValue(user);
-
         StorageReference riversRef = mStorageRef.child(route);
-
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        routeDowload = downloadUrl.toString();
+
+                        Customer user = new Customer(textEmail, textName, textLastname, textBorn, textDirection, textPassword, textPhone, textGender, textCity, routeDowload);
+                        mFireBase.child("Customer").child(textEmail.replace(".", ",")).setValue(user);
                         //Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
                     }
                 })
