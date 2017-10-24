@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (user != null) {
                     // User is signed in
                     //Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intentNavigation.putExtra("email", user);
+                    //intentNavigation.putExtra("email", user.getEmail());
                     //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
                     //startActivity(intentNavigation);
                     Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());

@@ -114,7 +114,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
         } else if (id == R.id.itemSign_off) {
             firebaseAuth.signOut();
-            Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class);
+            Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intentLogOut);
             finish();
 
