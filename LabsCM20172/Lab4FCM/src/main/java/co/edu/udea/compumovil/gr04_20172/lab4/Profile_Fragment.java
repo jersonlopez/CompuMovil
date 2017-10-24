@@ -111,8 +111,15 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        String name, lastname, uri;
+        name = getActivity().getIntent().getStringExtra("name");
+        lastname = getActivity().getIntent().getStringExtra("lastname");
+        uri = getActivity().getIntent().getStringExtra("photo");
         Intent intentToEdit = new Intent(getActivity(), EditProfile.class);
         intentToEdit.putExtra("email", email);
+        intentToEdit.putExtra("name", name);
+        intentToEdit.putExtra("lastname", lastname);
+        intentToEdit.putExtra("photo", uri);
         intentToEdit.putExtra("type", type);
         getActivity().startActivity(intentToEdit);
     }

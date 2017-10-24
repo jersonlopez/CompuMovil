@@ -128,8 +128,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
                             Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intentNavigation.putExtra("email", account.getEmail());
+                            intentNavigation.putExtra("name", acct.getGivenName());
+                            intentNavigation.putExtra("lastname", acct.getFamilyName());
+                            intentNavigation.putExtra("photo", acct.getPhotoUrl().toString());
                             intentNavigation.putExtra("type", 2);
-                            Toast.makeText(getApplicationContext(), acct.getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), acct.getFamilyName(), Toast.LENGTH_SHORT).show();
                             startActivity(intentNavigation);
                             finish();
                             Log.d("TAG", "signInWithCredential:success");
@@ -137,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                            Toast.makeText(getApplicationContext(), "Autenticación fallida.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }

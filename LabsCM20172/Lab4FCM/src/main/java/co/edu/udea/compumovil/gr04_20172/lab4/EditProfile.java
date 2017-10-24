@@ -21,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -122,6 +123,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             eBorn.setOnClickListener(this);
             btnsave.setOnClickListener(this);
 
+            downloadUserGoogle();
+
         } else {
             Toast.makeText(getApplicationContext(), String.valueOf(type), Toast.LENGTH_SHORT).show();
         }
@@ -129,6 +132,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     }
 
     public void downloadUser(){
+        //descargar datos del usuario si se logueo con correo y contraseña
         ref.orderByChild("id").equalTo(email).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -169,32 +173,20 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
-        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
+    public void downloadUserGoogle(){
+        //descargar datos si es logueado con Google
+        String name, lastname, uri;
+        name = getIntent().getStringExtra("name");
+        lastname = getIntent().getStringExtra("lastname");
+        uri = getIntent().getStringExtra("photo");
+        //Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+        eName.setText(name);
+        eLastname.setText(lastname);
+        Picasso.with(getApplicationContext()).load(uri).into(myImageView);
+        textImage = "ya";
 
-        final AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(getApplicationContext(), acct.getEmail(), Toast.LENGTH_SHORT).show();
-                            Log.d("TAG", "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
     }
+
 
     @Override
     public void onClick(View v) {
@@ -225,7 +217,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
                 }else if (type == 2){
                     //se logueo con Google
-
+                    withGoogle();
 
                 }else{
                     //en cualquier otro caso
@@ -244,7 +236,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     public void withEmailPass(){
 
         //lo que debe hacer si se logueo con correo y contraseña
-
         textName = eName.getText().toString();
         textLastname = eLastname.getText().toString();
         textBorn = eBorn.getText().toString();
@@ -262,12 +253,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             if (user.getId().equals(textEmail) && user.getPassword().equals(textPassword)){
                 //no modifico correo ni contraseña
-                Register();
+                RegisterEmailAndPass();
             }else{
                 //modifico correo o contraseña
                 customer.updateEmail(textEmail);
                 customer.updatePassword(textPassword);
-                Register();
+                RegisterEmailAndPass();
             }
 
         } else if (textPassword.length() < 6){
@@ -278,7 +269,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void Register(){
+    public void RegisterEmailAndPass(){
 
         String route = "user/".concat(textEmail.concat("img.png"));
         StorageReference riversRef = mStorageRef.child(route);
@@ -311,7 +302,61 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         }
                     });
         }
+        Toast.makeText(getApplicationContext(), "Datos actulizados", Toast.LENGTH_SHORT).show();
+        Intent intentNavigation = new Intent(EditProfile.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intentNavigation);
+        finish();
+    }
 
+    public void withGoogle(){
+        //lo que debe hacer si se logueo con Google
+        textName = eName.getText().toString();
+        textLastname = eLastname.getText().toString();
+        textBorn = eBorn.getText().toString();
+        textDirection = eDirection.getText().toString();
+        textPhone = ePhone.getText().toString();
+        textCity = eCity.getText().toString();
+
+        if (textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
+            Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
+
+        } else{
+                RegisterWithGoogle();
+        }
+    }
+
+    public void RegisterWithGoogle(){
+        String route = "user/".concat(email.concat("img.png"));
+        StorageReference riversRef = mStorageRef.child(route);
+
+        //si no modifico la foto
+        if (textImage.equals("ya")){
+            routeDowload = getIntent().getStringExtra("photo");
+            Customer user = new Customer(email, textName, textLastname, textBorn, textDirection, "null", textPhone, textGender, textCity, routeDowload);
+            mFireBase.child("Customer").child(email.replace(".", ",")).setValue(user);
+        }else{
+            //si modifico la foto
+            riversRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            routeDowload = downloadUrl.toString();
+
+                            Customer user = new Customer(email, textName, textLastname, textBorn, textDirection, "null", textPhone, textGender, textCity, routeDowload);
+                            mFireBase.child("Customer").child(email.replace(".", ",")).setValue(user);
+                            //Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            // ...
+                        }
+                    });
+        }
         Toast.makeText(getApplicationContext(), "Datos actulizados", Toast.LENGTH_SHORT).show();
         Intent intentNavigation = new Intent(EditProfile.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intentNavigation);
