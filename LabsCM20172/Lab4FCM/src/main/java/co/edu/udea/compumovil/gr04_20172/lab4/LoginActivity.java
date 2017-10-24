@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText email, password;
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInAccount account;
 
 
     @Override
@@ -61,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    //Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //intentNavigation.putExtra("email", user);
+                    //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
+                    //startActivity(intentNavigation);
                     Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -80,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+                        Toast.makeText(LoginActivity.this, "Un error ha ocurrido", Toast.LENGTH_SHORT).show();
                     }
                 } /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -90,16 +95,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        singInGoogle();
-    }
-
-    public void singInGoogle(){
-        Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
-        Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //intentNavigation.putExtra("email", user);
-        //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
-        startActivity(intentNavigation);
-        finish();
     }
 
     @Override
@@ -111,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = result.getSignInAccount();
+                account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
@@ -120,19 +115,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        final AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
+                            Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intentNavigation.putExtra("email", account.getEmail());
+                            intentNavigation.putExtra("type", 2);
+                            Toast.makeText(getApplicationContext(), acct.getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+                            startActivity(intentNavigation);
+                            finish();
                             Log.d("TAG", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
+                            //FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
@@ -206,6 +207,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
                             Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intentNavigation.putExtra("email", user);
+                            intentNavigation.putExtra("type", 1);
                             //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
                             startActivity(intentNavigation);
                             finish();

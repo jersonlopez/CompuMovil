@@ -3,6 +3,7 @@ package co.edu.udea.compumovil.gr04_20172.lab4;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,13 +26,15 @@ import com.squareup.picasso.Picasso;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Profile_Fragment extends Fragment {
+public class Profile_Fragment extends Fragment implements View.OnClickListener {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
     Customer user;
 
     Context context;
+    private int type;
+    private Button btnUpdate;
     String email;
     Cursor cursor;
     TextView nameProfile=null, lastnameProfile=null, emailProfile=null, genderProfile=null, phoneProfile=null;
@@ -47,6 +51,7 @@ public class Profile_Fragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         email = getActivity().getIntent().getStringExtra("email");
+        type = getActivity().getIntent().getIntExtra("type", 5);
         firebaseDatabase = FirebaseDatabase.getInstance();
         ref = firebaseDatabase.getReference("Customer");
         //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
@@ -62,6 +67,8 @@ public class Profile_Fragment extends Fragment {
         genderProfile = v.findViewById(R.id.textViewGender);
         phoneProfile = v.findViewById(R.id.textViewNumberphoneProfile);
         photo = v.findViewById(R.id.imageViewProfile);
+        btnUpdate = v.findViewById(R.id.btnUpdate);
+        btnUpdate.setOnClickListener(this);
 
         ref.orderByChild("id").equalTo(email).addChildEventListener(new ChildEventListener() {
             @Override
@@ -102,4 +109,11 @@ public class Profile_Fragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onClick(View view) {
+        Intent intentToEdit = new Intent(getActivity(), EditProfile.class);
+        intentToEdit.putExtra("email", email);
+        intentToEdit.putExtra("type", type);
+        getActivity().startActivity(intentToEdit);
+    }
 }

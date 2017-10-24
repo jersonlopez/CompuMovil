@@ -42,8 +42,6 @@ import static co.edu.udea.compumovil.gr04_20172.lab4.ApartmentsDB.ColumnUser.ema
  * A simple {@link Fragment} subclass.
  */
 public class Apartment_Fragment extends Fragment implements View.OnClickListener {
-    //private List<Apartment> apartments;
-    //private RecyclerView.LayoutManager llm;
     private FirebaseDatabase database;
     private DatabaseReference ref;
     private Apartment apartment;
@@ -91,16 +89,7 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 apartment = dataSnapshot.getValue(Apartment.class);
                 //Toast.makeText(getActivity(), apartment.getUbication(), Toast.LENGTH_SHORT).show();
 
-                String textType = apartment.getType();
-                String textPrice = apartment.getPrice();
-                String textArea = apartment.getArea();
-                String textShort = apartment.getShortDescription();
-                String textubication = apartment.getUbication();
-                String texPhoto = apartment.getPhoto();
-                String textLarge = apartment.getLargeDescription();
-
-                //apartments.add(new Apartment("soy la foto", textType, textPrice, textArea, textShort, textubication, "hola a todos"));
-                apartments.add(apartment);
+               apartments.add(apartment);
                 adapter.notifyDataSetChanged();
 
             }

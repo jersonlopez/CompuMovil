@@ -58,10 +58,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAuth mAuth;
     private static String routeDowload;
 
-    private ImageView myImageView;
+
     static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
     Button btnsave;
+    private ImageView myImageView;
     private EditText eName, eLastname, eBorn, eDirection, eEmail, ePassword, ecPassword, ePhone, eCity;
     private String textName,textLastname,textBorn,textDirection,textEmail, textPassword, textPhone, textCity;
     private RadioGroup radioGroup;
@@ -70,8 +71,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     String textImage = "";
     private Uri uri;
     Bitmap bitmap;
-    ByteArrayOutputStream baos;
-    byte[] blob;
 
 
     @Override
@@ -122,10 +121,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }, year, month, day);
                 datePickerDialog.show();
                 break;
-
-            /*case R.id.imageViewProfile:
-
-                break;*/
 
             case R.id.btnSave:
 

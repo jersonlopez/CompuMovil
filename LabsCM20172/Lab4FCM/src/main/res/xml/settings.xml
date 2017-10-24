@@ -3,16 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="Settings">
 
-    <Preference
-        android:summary="Edita nombre, foto, correo..."
-        android:key="updateProfile"
-        android:title="Actualizar perfil">
-        <intent
-            android:action="android.intent.action.EDIT_PROFILE"
-            android:targetClass="co.edu.udea.compumovil.gr04_20172.lab4.Activity.EditProfile"/>
-
-    </Preference>
-
     <SwitchPreference
         android:layout_width="match_parent"
         android:defaultValue="true"
