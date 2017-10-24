@@ -10,26 +10,30 @@ import java.util.List;
  */
 
 public class Apartment {
-    //int photoId;
-    String type;
-    String price;
-    String area;
-    String description;
-    String ubication;
-    Bitmap photo;
-    int id;
+    private String area;
+    private String largeDescription;
+    private String photo;
+    private String price;
+    private String rooms;
+    private String shortDescription;
+    private String type;
+    private String ubication;
 
 
-    Apartment(Bitmap photo, String type, String price, String area, String description, String ubication, int id) {
+
+    Apartment( String area, String largeDescription, String photo, String price, String rooms, String shortDescription, String type, String ubication) {
         this.photo = photo;
         this.type = type;
         this.price = price;
         this.area = area;
-        this.description = description;
+        this.shortDescription= shortDescription;
         this.ubication = ubication;
-        this.id = id;
+        this.largeDescription = largeDescription;
+        this.rooms = rooms;
 
     }
+
+    Apartment(){}
 
     public String getType() {
         return type;
@@ -55,36 +59,45 @@ public class Apartment {
         this.area = area;
     }
 
-    public String getDescription() {
-        return description;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
-    public Bitmap getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Bitmap photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
-    public String getUbitacion() {
+
+    public String getLargeDescription() {
+        return largeDescription;
+    }
+
+    public void setLargeDescription(String largeDescription) {
+        this.largeDescription = largeDescription;
+    }
+
+    public String getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(String rooms) {
+        this.rooms = rooms;
+    }
+
+    public String getUbication() {
         return ubication;
     }
 
     public void setUbication(String ubication) {
-        this.type = ubication;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.ubication = ubication;
     }
 }
 

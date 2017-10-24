@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,7 @@ public class Navigation_Drawer extends AppCompatActivity
     Fragment fragment=null;
     Boolean fragmentChoose=false;
     String email;
-    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-    TextView tName, tEmail;
+    private FirebaseAuth firebaseAuth;
 
 
     @Override
@@ -45,6 +46,7 @@ public class Navigation_Drawer extends AppCompatActivity
         email = getIntent().getStringExtra("email");
         //Toast.makeText(getApplicationContext(),"ppal " + email, Toast.LENGTH_SHORT).show();
         setSupportActionBar(toolbar);
+        firebaseAuth = FirebaseAuth.getInstance();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -60,8 +62,6 @@ public class Navigation_Drawer extends AppCompatActivity
 
         fragment=new Apartment_Fragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.contentNavigation, fragment).commit();
-
-
 
     }
 
@@ -106,8 +106,6 @@ public class Navigation_Drawer extends AppCompatActivity
         } else if (id == R.id.itemProfile) {
             fragment=new Profile_Fragment();
             fragmentChoose=true;
-            //transaction.addToBackStack(null);
-            //transaction.commit();
 
         } else if (id == R.id.itemSetting) {
             fragment =new SettingsScreen();
@@ -115,6 +113,7 @@ public class Navigation_Drawer extends AppCompatActivity
 
 
         } else if (id == R.id.itemSign_off) {
+            firebaseAuth.signOut();
             Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class);
             startActivity(intentLogOut);
             finish();
@@ -137,10 +136,10 @@ public class Navigation_Drawer extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentClickButton(int id) {
+    public void onFragmentClickButton(String id) {
         fragment=new FragmentDetail();
         Bundle bundle=new Bundle();
-        bundle.putInt("id",id);
+        bundle.putString("id",id);
         fragment.setArguments(bundle);
         FragmentManager fragmentManager=getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();

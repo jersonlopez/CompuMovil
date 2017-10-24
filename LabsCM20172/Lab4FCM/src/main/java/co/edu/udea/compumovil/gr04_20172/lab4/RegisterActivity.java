@@ -30,8 +30,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,22 +55,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     DatabaseReference mFireBase = FirebaseDatabase.getInstance().getReference();
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+    private FirebaseAuth mAuth;
+    private static String routeDowload;
 
-    private ImageView myImageView;
+
     static final int REQUEST_IMAGE_GET = 101;
     Button btn_choose_image;
-    DbHelper dbHelper;
-    SQLiteDatabase db;
     Button btnsave;
+    private ImageView myImageView;
     private EditText eName, eLastname, eBorn, eDirection, eEmail, ePassword, ecPassword, ePhone, eCity;
+    private String textName,textLastname,textBorn,textDirection,textEmail, textPassword, textPhone, textCity;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     String textGender = "";
     String textImage = "";
     private Uri uri;
     Bitmap bitmap;
-    ByteArrayOutputStream baos;
-    byte[] blob;
 
 
     @Override
@@ -89,8 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         eCity = (EditText) findViewById(R.id.editTextCity);
         eBorn.setOnClickListener(this);
         btnsave.setOnClickListener(this);
-        dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
-        db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -119,98 +122,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 datePickerDialog.show();
                 break;
 
-            /*case R.id.imageViewProfile:
-
-                break;*/
-
             case R.id.btnSave:
 
-                String textName = eName.getText().toString();
-                String textLastname = eLastname.getText().toString();
-                String textBorn = eBorn.getText().toString();
-                String textDirection = eDirection.getText().toString();
-                String textEmail = eEmail.getText().toString();
-                String textPassword = ePassword.getText().toString();
+                textName = eName.getText().toString();
+                textLastname = eLastname.getText().toString();
+                textBorn = eBorn.getText().toString();
+                textDirection = eDirection.getText().toString();
+                textEmail = eEmail.getText().toString();
+                textPassword = ePassword.getText().toString();
                 String textCPassword = ecPassword.getText().toString();
-                String textPhone = ePhone.getText().toString();
-                String textCity = eCity.getText().toString();
+                textPhone = ePhone.getText().toString();
+                textCity = eCity.getText().toString();
 
                 if (bitmap == null ||textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
-                } else if (textPassword.equals(textCPassword)) {
-                    baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
-                    blob = baos.toByteArray();
+                } else if (textPassword.equals(textCPassword) && (textPassword.length() >= 6)){
 
-                    Customer user = new Customer(textEmail,textName,textLastname,textBorn, textDirection, textPassword, textPhone, textGender, textCity, textImage);
 
-                    mFireBase.child("Customer").child(textEmail.replace(".", ",")).setValue(user);
-
-                    String route = "images/".concat(textEmail.concat("img.png"));
-                    StorageReference riversRef = mStorageRef.child(route);
-
-                    riversRef.putFile(uri)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    mAuth.createUserWithEmailAndPassword(textEmail, textPassword)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    // Get a URL to the uploaded content
-                                    //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                    Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                                        Register();
+                                    } else{
+                                        Toast.makeText(getApplicationContext(), "Error creating user", Toast.LENGTH_SHORT).show();
+                                    }
+
                                     // ...
                                 }
                             });
 
-                    /*ContentValues values = new ContentValues();
-                    values.put(ApartmentsDB.ColumnUser.photo, blob);
-                    values.put(ApartmentsDB.ColumnUser.email, textEmail);
-                    values.put(ApartmentsDB.ColumnUser.userName, textName);
-                    values.put(ApartmentsDB.ColumnUser.userLastName, textLastname);
-                    values.put(ApartmentsDB.ColumnUser.birthdate, textBorn);
-                    values.put(ApartmentsDB.ColumnUser.address, textDirection);
-                    values.put(ApartmentsDB.ColumnUser.password, textPassword);
-                    values.put(ApartmentsDB.ColumnUser.numberPhone, textPhone);
-                    values.put(ApartmentsDB.ColumnUser.gender, textGender);
-                    values.put(ApartmentsDB.ColumnUser.city, textCity);
-                    //values.put(ApartmentsDB.ColumnUser.photo, "hola");
-                    //Log.d("hola","pase por aqui");
-                    db.insertWithOnConflict(ApartmentsDB.entityUser, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-
-                    //String cosulta= "select email, city from "  + ApartmentsDB.entityUser;
-                    String consulta = "select " + ApartmentsDB.ColumnUser.photo + " from " + ApartmentsDB.entityUser;
-                    Cursor cursor = db.rawQuery(consulta, null);
-                    if(cursor.getCount()>0)
-                    {
-                        //Toast.makeText(getApplicationContext(),"la imagen si se guardo", Toast.LENGTH_SHORT).show();
-                        //Log.d("Excelente", "Hay datos en el cursor");
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(),"la imagen no se guardo", Toast.LENGTH_SHORT).show();
-                        Log.d("Ups","Don bochi sin elementos");
-                    }
-                    //Toast.makeText(getApplicationContext(), cursor.getCount() + " nacimiento: " + textBorn, Toast.LENGTH_LONG).show();
-                    /*while (cursor.moveToNext()) {
-                        //Log.d(TAG,cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                        //Log.d(TAG,cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.city)));
-                        Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.gender)), Toast.LENGTH_LONG).show();
-                        //Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.city)), Toast.LENGTH_LONG).show();
-
-
-                        //eEmail.setText(cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnUser.email)));
-                        //eCity.setText(cursor.getString(1));
-                    }*/
-                    Toast.makeText(getApplicationContext(), "Regitro exitoso", Toast.LENGTH_SHORT).show();
-                    Intent intentNavigation = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intentNavigation);
-                    finish();
-
+                } else if (textPassword.length() < 6){
+                    Toast.makeText(getApplicationContext(), "La contraseña debe tener minimo 6 digitos", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }
@@ -221,6 +167,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
 
+    }
+
+    public void Register(){
+
+        String route = "user/".concat(textEmail.concat("img.png"));
+        StorageReference riversRef = mStorageRef.child(route);
+        riversRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        routeDowload = downloadUrl.toString();
+
+                        Customer user = new Customer(textEmail, textName, textLastname, textBorn, textDirection, textPassword, textPhone, textGender, textCity, routeDowload);
+                        mFireBase.child("Customer").child(textEmail.replace(".", ",")).setValue(user);
+                        //Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
+
+        Toast.makeText(getApplicationContext(), "Regitro exitoso", Toast.LENGTH_SHORT).show();
+        Intent intentNavigation = new Intent(RegisterActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intentNavigation);
+        finish();
     }
 
     public void rbOnClick(View view) {

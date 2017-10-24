@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class SettingsScreen extends PreferenceFragmentCompat {
 
-private SwitchPreference estate;
+    private SwitchPreference estate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

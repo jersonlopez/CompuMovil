@@ -1,40 +1,44 @@
 package co.edu.udea.compumovil.gr04_20172.lab4;
 
-import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
-import java.util.Calendar;
 
 public class Add_Apartment_Activity extends AppCompatActivity implements View.OnClickListener {
 
 
-    DbHelper dbHelper;
-    SQLiteDatabase db;
+
+    DatabaseReference mFireBase = FirebaseDatabase.getInstance().getReference();
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+    private Uri uri;
+
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
-    String email;
+    private  String textType, textPrice, textArea, textRooms, textShort, textLarge, texUbication, nombre;
+    private String email;
+    private static String routeDowload;
     Button btnAdd;
     ImageView imageView;
     static final int REQUEST_IMAGE_GET = 101;
     Bitmap bitmap;
-    ByteArrayOutputStream baos;
-    byte[] blob;
+
 
 
     public Add_Apartment_Activity(){
@@ -58,8 +62,6 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
         eLargeDescription = (EditText) findViewById(R.id.editTextLargeDescription);
         btnAdd = (Button) findViewById(R.id.buttonAdd);
         btnAdd.setOnClickListener(this);
-        dbHelper = new DbHelper(getBaseContext()); //Instancia de DbHelper
-        db = dbHelper.getWritableDatabase(); //Obtenemos la instancia de la BD
 
     }
 
@@ -69,61 +71,48 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
 
             case R.id.buttonAdd:
 
-                String textType = eType.getText().toString();
-                String textPrice = ePrice.getText().toString();
-                String textArea = eArea.getText().toString();
-                String textRooms = eRooms.getText().toString();
-                String textShort = eShortDescription.getText().toString();
-                String textLarge = eLargeDescription.getText().toString();
-                String texUbication = eUbication.getText().toString();
+                textType = eType.getText().toString();
+                textPrice = ePrice.getText().toString();
+                textArea = eArea.getText().toString();
+                textRooms = eRooms.getText().toString();
+                textShort = eShortDescription.getText().toString();
+                textLarge = eLargeDescription.getText().toString();
+                texUbication = eUbication.getText().toString();
 
                 if (bitmap==null || textType.equals("") || textPrice.equals("") || textArea.equals("") || textRooms.equals("") || textShort.equals("") || textLarge.equals("") || texUbication.equals("")) {
                     Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
                 } else{
-                    baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG,75,baos);
-                    blob =baos.toByteArray();
-                    ContentValues values1= new ContentValues();
-                    ContentValues values= new ContentValues();
-                    values.put(ApartmentsDB.ColumnApartment.ubicationApartment, texUbication);
-                    values.put(ApartmentsDB.ColumnApartment.typeApartment, textType);
-                    values.put(ApartmentsDB.ColumnApartment.priceApartment, textPrice);
-                    values.put(ApartmentsDB.ColumnApartment.areaApartment, textArea);
-                    values.put(ApartmentsDB.ColumnApartment.roomsApartment, textRooms);
-                    values.put(ApartmentsDB.ColumnApartment.ShortDescriptionApartment, textShort);
-                    values.put(ApartmentsDB.ColumnApartment.LargeDescriptionApartment, textLarge);
+                    nombre = texUbication; //Nommbre de la imagen
+                    nombre = nombre.replace(" ", "");
+                    nombre = nombre.replace("#", "");
+                    nombre = nombre.replace("-", "");
 
-                    //Log.d("hola","pase por aqui");
-                    db.insertWithOnConflict(ApartmentsDB.entityApartment, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                    String route = "Apartment/".concat(nombre.concat("img.png"));
+                    StorageReference riversRef = mStorageRef.child(route);
+                    riversRef.putFile(uri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                     //Get a URL to the uploaded content
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    routeDowload = downloadUrl.toString();
 
-                    String consulta="select "+ ApartmentsDB.ColumnApartment.ubicationApartment +" from " +ApartmentsDB.entityApartment+ " where " + ApartmentsDB.ColumnApartment.typeApartment+"="+ "\"" + textType + "\"" +
-                            " and "+ApartmentsDB.ColumnApartment.priceApartment+"=" + "\"" + textPrice + "\"" + " and "+ApartmentsDB.ColumnApartment.roomsApartment+"=" + "\"" + textRooms + "\"" +
-                            " and "+ApartmentsDB.ColumnApartment.areaApartment+"=" + "\"" + textArea + "\"" + " and "+ApartmentsDB.ColumnApartment.ubicationApartment+"=" + "\"" +
-                            texUbication + "\"";
-                    Cursor cursor=db.rawQuery(consulta,null);
-                    if(cursor.moveToNext()){
-                        values1.put(ApartmentsDB.ColumnResource.photo, blob);
-                        values1.put(ApartmentsDB.ColumnResource.ubicationApartment, texUbication);
-                        db.insertWithOnConflict(ApartmentsDB.entityResource,null,values1,SQLiteDatabase.CONFLICT_IGNORE);
-                    }
+                                    Apartment apartment = new Apartment(textArea, textLarge, routeDowload, textPrice, textRooms, textShort, textType, texUbication);
 
-                    String consulta1 = "select " + ApartmentsDB.ColumnResource.photo + " from " + ApartmentsDB.entityResource;
-                    Cursor cursor1 = db.rawQuery(consulta1, null);
-                    if(cursor1.getCount()>0)
-                    {
-                        //Toast.makeText(getApplicationContext(),"la imagen si guardo", Toast.LENGTH_SHORT).show();
-                        Log.d("Excelente", "Hay datos en el cursor");
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), "la imagen no entro", Toast.LENGTH_SHORT).show();
-                        //Log.d("Ups","Don bochi sin elementos");
-                    }
-                    /*while (cursor.moveToNext()) {
-                        Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.ubicationApartment)), Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(ApartmentsDB.ColumnApartment.priceApartment)), Toast.LENGTH_LONG).show();
-                    }*/
+                                    mFireBase.child("Apartment").child(nombre).setValue(apartment);
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                    // ...
+                                }
+                            });
+
+                    //Toast.makeText(getApplicationContext(), routeDowload, Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intentNavigation.putExtra("email",email);
@@ -152,7 +141,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
+            uri = data.getData();
             // Log.d(TAG, String.valueOf(bitmap));
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);

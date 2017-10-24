@@ -275,10 +275,7 @@
                 android:layout_weight="0.54"
                 android:text="@string/womanRegister" />
 
-
         </RadioGroup>
-
-
 
     </android.support.constraint.ConstraintLayout >
 
