@@ -64,14 +64,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private static String routeDowload;
     private ImageView myImageView;
     private EditText eName, eLastname, eBorn, eDirection, eEmail, ePassword, ecPassword, ePhone, eCity;
-    private String textName,textLastname,textBorn,textDirection,textEmail, textPassword, textPhone, textCity;
+    private String textName, textLastname, textBorn, textDirection, textEmail, textPassword, textPhone, textCity;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private String textGender = "";
     private String textImage = "";
     private Uri uri;
     private Bitmap bitmap;
-
 
 
     @Override
@@ -81,13 +80,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         email = getIntent().getStringExtra("email");
         mAuth = FirebaseAuth.getInstance();
         customer = mAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ref = firebaseDatabase.getReference("Customer");
 
         //Toast.makeText(getApplicationContext(), String.valueOf(type), Toast.LENGTH_SHORT).show();
-        if (type == 1){
+        if (type == 1) {
             setContentView(R.layout.activity_edit_profile);
 
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            ref = firebaseDatabase.getReference("Customer");
             myImageView = (ImageView) findViewById(R.id.img_show);
             btn_choose_image = (Button) findViewById(R.id.btn_choose_image);
             btn_choose_image.setOnClickListener(this);
@@ -106,7 +105,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             btnsave.setOnClickListener(this);
             downloadUser();
 
-        }else if (type == 2){
+        } else if (type == 2) {
             setContentView(R.layout.activity_edit_profile_google);
 
             myImageView = (ImageView) findViewById(R.id.img_show);
@@ -125,29 +124,53 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             downloadUserGoogle();
 
+        } else if (type == 3) {
+            setContentView(R.layout.edit_profile_facebook);
+
+            myImageView = (ImageView) findViewById(R.id.img_show);
+            btn_choose_image = (Button) findViewById(R.id.btn_choose_image);
+            btn_choose_image.setOnClickListener(this);
+            btnsave = (Button) findViewById(R.id.btnSave);
+            eName = (EditText) findViewById(R.id.editTextNombre);
+            radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
+            eBorn = (EditText) findViewById(R.id.editTextDate);
+            eDirection = (EditText) findViewById(R.id.editTextAddress);
+            ePhone = (EditText) findViewById(R.id.editTextPhone);
+            eCity = (EditText) findViewById(R.id.editTextCity);
+            eBorn.setOnClickListener(this);
+            btnsave.setOnClickListener(this);
+
+            downloadUserFacebook();
+
         } else {
             Toast.makeText(getApplicationContext(), String.valueOf(type), Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void downloadUser(){
-        //descargar datos del usuario si se logueo con correo y contraseña
+    private void downloadUserFacebook() {
+        //descargar datos si es logueado con Facebook
+
+        //si es nuevo
+        String name, uri;
+        name = getIntent().getStringExtra("name");
+        uri = getIntent().getStringExtra("photo");
+        //Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+        eName.setText(name);
+        Picasso.with(getApplicationContext()).load(uri).into(myImageView);
+        textImage = "ya";
+
+        //si ya se encuentra registrado
         ref.orderByChild("id").equalTo(email).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d("Aviso","¿Entró?");
+                Log.d("Aviso", "¿Entró?");
                 user = dataSnapshot.getValue(Customer.class);
                 eName.setText(user.getUsername());
                 ePhone.setText(String.valueOf(user.getNumberphone()));
-                eLastname.setText(user.getUserlastname());
-                eEmail.setText(user.getId());
                 eBorn.setText(user.birthdate);
                 eDirection.setText(user.getAddress());
-                ePassword.setText(user.getPassword());
-                ecPassword.setText(user.getPassword());
                 eCity.setText(user.getCity());
-                textImage = "ya";
                 Picasso.with(getApplicationContext()).load(user.getPhoto()).into(myImageView);
             }
 
@@ -171,10 +194,55 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             }
         });
+
     }
 
-    public void downloadUserGoogle(){
+    public void downloadUser() {
+        //descargar datos del usuario si se logueo con correo y contraseña
+        ref.orderByChild("id").equalTo(email).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("Aviso", "¿Entró?");
+                user = dataSnapshot.getValue(Customer.class);
+                eName.setText(user.getUsername());
+                ePhone.setText(String.valueOf(user.getNumberphone()));
+                eLastname.setText(user.getUserlastname());
+                eEmail.setText(user.getId());
+                eBorn.setText(user.birthdate);
+                eDirection.setText(user.getAddress());
+                ePassword.setText(user.getPassword());
+                ecPassword.setText(user.getPassword());
+                eCity.setText(user.getCity());
+                Picasso.with(getApplicationContext()).load(user.getPhoto()).into(myImageView);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        textImage = "ya";
+    }
+
+    public void downloadUserGoogle() {
         //descargar datos si es logueado con Google
+
+        //si es nuevo
         String name, lastname, uri;
         name = getIntent().getStringExtra("name");
         lastname = getIntent().getStringExtra("lastname");
@@ -184,6 +252,43 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         eLastname.setText(lastname);
         Picasso.with(getApplicationContext()).load(uri).into(myImageView);
         textImage = "ya";
+
+        //si ya se encuentra registrado
+        ref.orderByChild("id").equalTo(email).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("Aviso", "¿Entró?");
+                user = dataSnapshot.getValue(Customer.class);
+                eName.setText(user.getUsername());
+                eLastname.setText(user.getUserlastname());
+                ePhone.setText(String.valueOf(user.getNumberphone()));
+                eBorn.setText(user.birthdate);
+                eDirection.setText(user.getAddress());
+                eCity.setText(user.getCity());
+                Picasso.with(getApplicationContext()).load(user.getPhoto()).into(myImageView);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
@@ -211,15 +316,19 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             case R.id.btnSave:
 
-                if (type == 1){
+                if (type == 1) {
                     //se logueo con correo y contraseña
                     withEmailPass();
 
-                }else if (type == 2){
+                } else if (type == 2) {
                     //se logueo con Google
                     withGoogle();
 
-                }else{
+                } else if (type == 3) {
+                    //se logueo con Google
+                    withFacebook();
+
+                } else {
                     //en cualquier otro caso
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
@@ -233,7 +342,63 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void withEmailPass(){
+    private void withFacebook() {
+        //lo que debe hacer si se logueo con Google
+        textName = eName.getText().toString();
+        textBorn = eBorn.getText().toString();
+        textDirection = eDirection.getText().toString();
+        textPhone = ePhone.getText().toString();
+        textCity = eCity.getText().toString();
+
+        if (textName.equals("") || textBorn.equals("") || textDirection.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
+            Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
+
+        } else {
+            RegisterWithFacebook();
+        }
+    }
+
+    private void RegisterWithFacebook() {
+        String route = "user/".concat(email.concat("img.png"));
+        StorageReference riversRef = mStorageRef.child(route);
+
+        //si no modifico la foto
+        if (textImage.equals("ya")) {
+            routeDowload = getIntent().getStringExtra("photo");
+            Customer user = new Customer(email, textName, "null", textBorn, textDirection, "null", textPhone, textGender, textCity, routeDowload);
+            mFireBase.child("Customer").child(email.replace(".", ",")).setValue(user);
+        } else {
+            //si modifico la foto
+            riversRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            routeDowload = downloadUrl.toString();
+
+                            Customer user = new Customer(email, textName, "null", textBorn, textDirection, "null", textPhone, textGender, textCity, routeDowload);
+                            mFireBase.child("Customer").child(email.replace(".", ",")).setValue(user);
+                            //Toast.makeText(getApplicationContext(), "subi la imagen", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            // ...
+                        }
+                    });
+        }
+        Toast.makeText(getApplicationContext(), "Datos actulizados", Toast.LENGTH_SHORT).show();
+        Intent intentNavigation = new Intent(EditProfile.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentNavigation.putExtra("email", email);
+        intentNavigation.putExtra("type", 3);
+        startActivity(intentNavigation);
+        finish();
+    }
+
+    public void withEmailPass() {
 
         //lo que debe hacer si se logueo con correo y contraseña
         textName = eName.getText().toString();
@@ -249,19 +414,19 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         if (textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textEmail.equals("") || textPassword.equals("") || textCPassword.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
             Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
-        } else if (textPassword.equals(textCPassword) && (textPassword.length() >= 6)){
+        } else if (textPassword.equals(textCPassword) && (textPassword.length() >= 6)) {
 
-            if (user.getId().equals(textEmail) && user.getPassword().equals(textPassword)){
+            if (user.getId().equals(textEmail) && user.getPassword().equals(textPassword)) {
                 //no modifico correo ni contraseña
                 RegisterEmailAndPass();
-            }else{
+            } else {
                 //modifico correo o contraseña
                 customer.updateEmail(textEmail);
                 customer.updatePassword(textPassword);
                 RegisterEmailAndPass();
             }
 
-        } else if (textPassword.length() < 6){
+        } else if (textPassword.length() < 6) {
             Toast.makeText(getApplicationContext(), "La contraseña debe tener minimo 6 digitos", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
@@ -269,17 +434,16 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void RegisterEmailAndPass(){
-
+    public void RegisterEmailAndPass() {
         String route = "user/".concat(textEmail.concat("img.png"));
         StorageReference riversRef = mStorageRef.child(route);
 
         //si no modifico la foto
-        if (textImage.equals("ya")){
+        if (textImage.equals("ya")) {
             routeDowload = user.getPhoto();
             Customer user = new Customer(textEmail, textName, textLastname, textBorn, textDirection, textPassword, textPhone, textGender, textCity, routeDowload);
             mFireBase.child("Customer").child(textEmail.replace(".", ",")).setValue(user);
-        }else{
+        } else {
             //si modifico la foto
             riversRef.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -304,11 +468,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
         Toast.makeText(getApplicationContext(), "Datos actulizados", Toast.LENGTH_SHORT).show();
         Intent intentNavigation = new Intent(EditProfile.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentNavigation.putExtra("email", email);
+        intentNavigation.putExtra("type", 1);
         startActivity(intentNavigation);
         finish();
     }
 
-    public void withGoogle(){
+    public void withGoogle() {
         //lo que debe hacer si se logueo con Google
         textName = eName.getText().toString();
         textLastname = eLastname.getText().toString();
@@ -320,21 +486,21 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         if (textName.equals("") || textLastname.equals("") || textBorn.equals("") || textDirection.equals("") || textPhone.equals("") || textCity.equals("") || textGender.equals("")) {
             Toast.makeText(getApplicationContext(), "Datos Incompletos", Toast.LENGTH_SHORT).show();
 
-        } else{
-                RegisterWithGoogle();
+        } else {
+            RegisterWithGoogle();
         }
     }
 
-    public void RegisterWithGoogle(){
+    public void RegisterWithGoogle() {
         String route = "user/".concat(email.concat("img.png"));
         StorageReference riversRef = mStorageRef.child(route);
 
         //si no modifico la foto
-        if (textImage.equals("ya")){
+        if (textImage.equals("ya")) {
             routeDowload = getIntent().getStringExtra("photo");
             Customer user = new Customer(email, textName, textLastname, textBorn, textDirection, "null", textPhone, textGender, textCity, routeDowload);
             mFireBase.child("Customer").child(email.replace(".", ",")).setValue(user);
-        }else{
+        } else {
             //si modifico la foto
             riversRef.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -359,6 +525,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
         Toast.makeText(getApplicationContext(), "Datos actulizados", Toast.LENGTH_SHORT).show();
         Intent intentNavigation = new Intent(EditProfile.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentNavigation.putExtra("email", email);
+        intentNavigation.putExtra("type", 2);
         startActivity(intentNavigation);
         finish();
     }
@@ -370,7 +538,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_GET);
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)

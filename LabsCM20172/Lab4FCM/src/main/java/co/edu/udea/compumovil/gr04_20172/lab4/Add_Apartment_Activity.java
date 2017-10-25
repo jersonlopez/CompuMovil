@@ -32,7 +32,8 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
 
     EditText eType, ePrice, eArea, eRooms, eUbication, eShortDescription, eLargeDescription;
     private  String textType, textPrice, textArea, textRooms, textShort, textLarge, texUbication, nombre;
-    private String email;
+    private String email, name, lastname, uri1;
+    private int type;
     private static String routeDowload;
     Button btnAdd;
     ImageView imageView;
@@ -49,6 +50,10 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         email = getIntent().getStringExtra("email");
+        name = getIntent().getStringExtra("name");
+        lastname = getIntent().getStringExtra("lastname");
+        uri1 = getIntent().getStringExtra("photo");
+        type = getIntent().getIntExtra("type", 5);
         //Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_add__apartment);
         imageView = (ImageView) findViewById(R.id.imageButton);
@@ -116,6 +121,10 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intentNavigation.putExtra("email",email);
+                    intentNavigation.putExtra("name", name);
+                    intentNavigation.putExtra("lastname", lastname);
+                    intentNavigation.putExtra("photo", uri1);
+                    intentNavigation.putExtra("type",type);
                     //Toast.makeText(getApplicationContext(),"cogi el correo "+ email, Toast.LENGTH_SHORT).show();
                     startActivity(intentNavigation);
                     finish();

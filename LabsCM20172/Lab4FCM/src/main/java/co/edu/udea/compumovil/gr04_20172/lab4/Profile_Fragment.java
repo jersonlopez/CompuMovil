@@ -31,11 +31,9 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener {
 
     private int type;
     private Button btnUpdate;
-    private String email;
+    private String email, name;
     private TextView nameProfile=null, lastnameProfile=null, emailProfile=null, genderProfile=null, phoneProfile=null;
     private ImageView photo;
-    private boolean b;
-
 
 
     public Profile_Fragment() {
@@ -47,10 +45,10 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         email = getActivity().getIntent().getStringExtra("email");
+        name = getActivity().getIntent().getStringExtra("name");
         type = getActivity().getIntent().getIntExtra("type", 5);
         firebaseDatabase = FirebaseDatabase.getInstance();
         ref = firebaseDatabase.getReference("Customer");
-        b = false;
         //Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
 
     }
@@ -78,7 +76,6 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener {
                 emailProfile.setText(user.getId());
                 genderProfile.setText(user.getGender());
                 Picasso.with(getContext()).load(user.getPhoto()).into(photo);
-                b = true;
             }
 
             @Override
@@ -101,17 +98,13 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
-        if (b){
-            Toast.makeText(getActivity(), "Debe actualizar perfil", Toast.LENGTH_SHORT).show();
-        }
         //Toast.makeText(getActivity(), "acabe en el perfil", Toast.LENGTH_SHORT).show();
         return v;
     }
 
     @Override
     public void onClick(View view) {
-        String name, lastname, uri;
+        String lastname, uri;
         name = getActivity().getIntent().getStringExtra("name");
         lastname = getActivity().getIntent().getStringExtra("lastname");
         uri = getActivity().getIntent().getStringExtra("photo");

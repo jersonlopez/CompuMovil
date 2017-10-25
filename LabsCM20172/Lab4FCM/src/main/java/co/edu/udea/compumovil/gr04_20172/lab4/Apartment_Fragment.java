@@ -35,7 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static co.edu.udea.compumovil.gr04_20172.lab4.ApartmentsDB.ColumnUser.email;
 
 
 /**
@@ -52,10 +51,8 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
     ArrayList<Apartment> apartments;
     FloatingActionButton fab;
     private RVAdapter adapter;
-    byte[] blob;
-    int id;
-    String email;
-    Bitmap bitmap;
+    int id, type;
+    String email, name, lastname, uri;
     private OnFragmentButtonListener mListener;
 
 
@@ -69,6 +66,10 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Apartment");
         user = FirebaseAuth.getInstance().getCurrentUser();
+        name = getActivity().getIntent().getStringExtra("name");
+        lastname = getActivity().getIntent().getStringExtra("lastname");
+        uri = getActivity().getIntent().getStringExtra("photo");
+        type = getActivity().getIntent().getIntExtra("type", 5);
 
         if(user != null)
         {
@@ -131,7 +132,11 @@ public class Apartment_Fragment extends Fragment implements View.OnClickListener
                 Snackbar.make(view, "Agregar apartamento", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intentToAdd = new Intent(getActivity(), Add_Apartment_Activity.class);
-                intentToAdd.putExtra("email",email);
+                intentToAdd.putExtra("email", email);
+                intentToAdd.putExtra("name", name);
+                intentToAdd.putExtra("lastname", lastname);
+                intentToAdd.putExtra("photo", uri);
+                intentToAdd.putExtra("type", type);
                 getActivity().startActivity(intentToAdd);
             }
         });

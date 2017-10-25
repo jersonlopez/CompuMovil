@@ -45,8 +45,6 @@
     <string name="aboutTextView">Inmobiliaria Ensueño busca apartamentos y casas en renta y te los muestra en una única página de resultados. De esta manera, buscando en un único lugar, te aseguras de que encontrarás la casa de tus sueños, por muy escondida que esté. Fácil, cómodo, rápido.</string>
     <string name="about">El curso Computación Móvil introduce los conceptos básicos acerca del diseño y desarrollo de aplicaciones móviles. En el curso se tratan temas generales de computación móvil, como evolución de las redes inalámbricas, caracteristicas especiales de los dispositivos móviles. Además veremos temas particulares en el desarrollo de aplicaciones en Android referentes a la arquitectura de software, manejo del framework de programación  y desarrollo de interfaces de usuario utilizando Material Design.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
