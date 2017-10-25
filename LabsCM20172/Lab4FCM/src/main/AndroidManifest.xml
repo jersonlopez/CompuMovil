@@ -31,13 +31,26 @@
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".EditProfile"
+        <activity
+            android:name=".EditProfile"
             android:parentActivityName=".Navigation_Drawer">
             <intent-filter>
-                <action android:name="android.intent.action.EDIT_PROFILE"/>
+                <action android:name="android.intent.action.EDIT_PROFILE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Add_Apartment_Activity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <receiver android:name=".Simple_Widget_Provider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/simple_widget_info" />
+        </receiver>
     </application>
 
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
