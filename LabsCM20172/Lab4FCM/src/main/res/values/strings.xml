@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id">131095257646547</string>
+    <string name="fb_login_protocol_scheme">fb131095257646547</string>
+
     <!--Titulo de la Aplicacion-->
     <string name="app_name">LabsCM20172</string>
 
