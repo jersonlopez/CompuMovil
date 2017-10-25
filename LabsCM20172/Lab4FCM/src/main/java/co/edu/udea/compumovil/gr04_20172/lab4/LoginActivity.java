@@ -144,15 +144,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             final FirebaseUser user = mAuth.getCurrentUser();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("FacebookOncomplete", "signInWithCredential:success");
-                            /*Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
                             Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intentNavigation.putExtra("email", account.getEmail());
-                            intentNavigation.putExtra("name", acct.getGivenName());
-                            intentNavigation.putExtra("lastname", acct.getFamilyName());
-                            intentNavigation.putExtra("photo", acct.getPhotoUrl().toString());
-                            intentNavigation.putExtra("type", 2);*/
-                            Toast.makeText(getApplicationContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
-                            //startActivity(intentNavigation);
+                            intentNavigation.putExtra("email", user.getEmail());
+                            intentNavigation.putExtra("name", user.getDisplayName());
+                            intentNavigation.putExtra("lastname", "null");
+                            intentNavigation.putExtra("photo", user.getPhotoUrl().toString());
+                            intentNavigation.putExtra("type", 3);
+                            //Toast.makeText(getApplicationContext(), user.getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+                            startActivity(intentNavigation);
                             finish();
                             //updateUI(user);
                         } else {
@@ -186,6 +186,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
+        }else{
+            Log.d("ActivityResult","ActivityResult");
+            mCallbackManager.onActivityResult(requestCode,resultCode,data);
         }
     }
 

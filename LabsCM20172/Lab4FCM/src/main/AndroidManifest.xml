@@ -40,10 +40,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Add_Apartment_Activity"
-            android:windowSoftInputMode="adjustResize" />
-
         <receiver android:name=".Simple_Widget_Provider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
