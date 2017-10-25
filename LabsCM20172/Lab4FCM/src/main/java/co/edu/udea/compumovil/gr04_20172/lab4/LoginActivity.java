@@ -1,17 +1,27 @@
 package co.edu.udea.compumovil.gr04_20172.lab4;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,9 +33,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,17 +50,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SignInButton btnGoogle;
     private Button Starting, Register;
+    private LoginButton loginButton;
+    CallbackManager mCallbackManager;
     private EditText email, password;
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInAccount account;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.setApplicationId("131095257646547");
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-
         btnGoogle = (SignInButton) findViewById(R.id.signInButton);
         Starting = (Button)findViewById(R.id.buttonLogin);
         Register = (Button)findViewById(R.id.buttonLogUp);
@@ -53,8 +73,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Starting.setOnClickListener(this);
         Register.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
-
         mAuth = FirebaseAuth.getInstance();
+
+        mCallbackManager = CallbackManager.Factory.create();
+        loginButton=(LoginButton)findViewById(R.id.fbLoginButton);
+        loginButton.setReadPermissions("email","public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("Facebook","Exitoso");
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("Facebook", "Cancel");
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("Facebook","Error");
+
+            }
+        });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -62,10 +104,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    //Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intentNavigation.putExtra("email", user.getEmail());
+                    Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intentNavigation.putExtra("email", user.getEmail());
                     //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
-                    //startActivity(intentNavigation);
+                    startActivity(intentNavigation);
                     Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -90,6 +132,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+    }
+
+    private void handleFacebookAccessToken(final AccessToken accessToken) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("FacebookOncomplete", "signInWithCredential:success");
+                            /*Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_SHORT).show();
+                            Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intentNavigation.putExtra("email", account.getEmail());
+                            intentNavigation.putExtra("name", acct.getGivenName());
+                            intentNavigation.putExtra("lastname", acct.getFamilyName());
+                            intentNavigation.putExtra("photo", acct.getPhotoUrl().toString());
+                            intentNavigation.putExtra("type", 2);*/
+                            Toast.makeText(getApplicationContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
+                            //startActivity(intentNavigation);
+                            finish();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("FacebookFailure", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Autenticación fallida.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
     }
 
     private void signIn() {
@@ -221,5 +295,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
     }
+
 }
 
