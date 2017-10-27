@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -114,7 +115,8 @@ public class Navigation_Drawer extends AppCompatActivity
 
         } else if (id == R.id.itemSign_off) {
             firebaseAuth.signOut();
-            Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class);
+            LoginManager.getInstance().logOut();
+            Intent intentLogOut = new Intent(Navigation_Drawer.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intentLogOut);
             finish();
 
