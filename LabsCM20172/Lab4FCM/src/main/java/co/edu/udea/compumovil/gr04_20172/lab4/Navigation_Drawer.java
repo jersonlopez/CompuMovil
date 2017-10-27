@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class Navigation_Drawer extends AppCompatActivity
     Boolean fragmentChoose=false;
     String email;
     private FirebaseAuth firebaseAuth;
+    private ImageView photo;
 
 
     @Override

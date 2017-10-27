@@ -1,5 +1,7 @@
 package co.edu.udea.compumovil.gr04_20172.lab4;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,7 +9,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
@@ -40,7 +46,7 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
     static final int REQUEST_IMAGE_GET = 101;
     Bitmap bitmap;
 
-
+    private View rootView;
 
     public Add_Apartment_Activity(){
         // Required empty public constructor
@@ -93,6 +99,10 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                     nombre = nombre.replace("#", "");
                     nombre = nombre.replace("-", "");
 
+                    //final ProgressDialog progressDialog = new ProgressDialog(g);
+                    //progressDialog.setTitle("Agregando Apartamento");
+                    //progressDialog.show();
+
                     String route = "Apartment/".concat(nombre.concat("img.png"));
                     StorageReference riversRef = mStorageRef.child(route);
                     riversRef.putFile(uri)
@@ -112,12 +122,22 @@ public class Add_Apartment_Activity extends AppCompatActivity implements View.On
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
-                                    // ...
+                                        //progressDialog.dismiss();
+                                        //Toast.makeText(getApplicationContext(), "AQUI: "+exception.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
+                            /*.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                         //displaying the upload progress
+                                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                                        }
+                            });*/
 
-                    //Toast.makeText(getApplicationContext(), routeDowload, Toast.LENGTH_SHORT).show();
+
+
+
                     Toast.makeText(getApplicationContext(), "Apartamento agregado", Toast.LENGTH_SHORT).show();
                     Intent intentNavigation = new Intent(Add_Apartment_Activity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intentNavigation.putExtra("email",email);
