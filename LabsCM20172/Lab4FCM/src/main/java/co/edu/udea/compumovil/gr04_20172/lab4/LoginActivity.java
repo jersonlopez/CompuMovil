@@ -39,6 +39,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,6 +49,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    DatabaseReference mFireBase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SignInButton btnGoogle;
@@ -65,6 +69,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         FacebookSdk.setApplicationId("131095257646547");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        mFireBase.child("Devices").child(refreshedToken).setValue(refreshedToken);
         btnGoogle = (SignInButton) findViewById(R.id.signInButton);
         Starting = (Button)findViewById(R.id.buttonLogin);
         Register = (Button)findViewById(R.id.buttonLogUp);
@@ -104,10 +111,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intentNavigation.putExtra("email", user.getEmail());
+                    //Intent intentNavigation = new Intent(LoginActivity.this, Navigation_Drawer.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //intentNavigation.putExtra("email", user.getEmail());
                     //Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
-                    startActivity(intentNavigation);
+                    //startActivity(intentNavigation);
                     Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -298,6 +305,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
     }
-
 }
 

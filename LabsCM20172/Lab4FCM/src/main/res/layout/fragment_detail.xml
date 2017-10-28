@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/SummerSky"
+                    android:background="@color/SummerSky"
                     android:layout_marginTop="18dp"
                     android:text="Ver en Mapa" />
 

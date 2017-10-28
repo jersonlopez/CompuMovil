@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.google.firebase.database.ChildEventListener;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
@@ -28,6 +30,8 @@ public class Simple_Widget_Provider extends AppWidgetProvider {
     private DatabaseReference ref= firebaseDatabase.getReference("Apartment");
     private FirebaseStorage storage= FirebaseStorage.getInstance();
     private StorageReference storageRef= storage.getReference();
+    private ImageView photo;
+
     RemoteViews views;
 
     public void mostrarDato(Apartment apartment,AppWidgetManager appWidgetManager,int appWidgetId)
@@ -39,44 +43,8 @@ public class Simple_Widget_Provider extends AppWidgetProvider {
         views.setTextViewText(R.id.description_text, apartment.getLargeDescription());
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
-    //
-    /*
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final int count = appWidgetIds.length;
 
-        //
-
-
-
-        //
-
-
-
-
-        for (int i = 0; i < count; i++) {
-            int widgetId = appWidgetIds[i];
-            String number = String.format("%03d", (new Random().nextInt(900) + 100));
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.simple_widget);
-            remoteViews.setTextViewText(R.id.textView, number);
-
-            Intent intent = new Intent(context, Simple_Widget_Provider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
-            appWidgetManager.updateAppWidget(widgetId, remoteViews);
-        }
-    }
-    */
-
-    //Aqui DAiro
-
-    void updateAppWidget(Context context, final AppWidgetManager appWidgetManager,
+    void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
                          final int appWidgetId) {
 
         //final CharSequence widgetText = context.getString(R.string.appwidget_text);
@@ -87,6 +55,7 @@ public class Simple_Widget_Provider extends AppWidgetProvider {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Apartment value = dataSnapshot.getValue(Apartment.class);
+                //Picasso.with(context).load(value.getPhoto()).into(photo);
                 mostrarDato(value,appWidgetManager,appWidgetId);
                 Log.d("OnChild",value.getShortDescription());
             }
