@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "658462530001-erp01errvqp3a2rjmifv6js755ascauf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.edu.udea.compumovil.gr04_20172.lab4",
+            "certificate_hash": "9c790c1b386790bc8f08d29de033572a93d7deb0"
+          }
+        },
+        {
+          "client_id": "658462530001-k9qt48fq9uvko7501aacln66mq9798kh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.edu.udea.compumovil.gr04_20172.lab4",
+            "certificate_hash": "58f7cd287e5dee227a86bd4f518a2eedbab21a41"
+          }
+        },
+        {
           "client_id": "658462530001-6ukr993p36ueau6uf485ejc5bbepbouk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -41,27 +57,11 @@
         {
           "client_id": "658462530001-4ru8hquablsblqjf1lnod60n36unqirb.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "658462530001-erp01errvqp3a2rjmifv6js755ascauf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "co.edu.udea.compumovil.gr04_20172.lab4",
-            "certificate_hash": "9c790c1b386790bc8f08d29de033572a93d7deb0"
-          }
-        },
-        {
-          "client_id": "658462530001-k9qt48fq9uvko7501aacln66mq9798kh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "co.edu.udea.compumovil.gr04_20172.lab4",
-            "certificate_hash": "58f7cd287e5dee227a86bd4f518a2eedbab21a41"
-          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQ8hd-6w_62DA_uEaktfQGYAucz1dsd78"
+          "current_key": "AIzaSyC08a2fj9HxGzcIAST9x8jfTUCzxvmmj4U"
         }
       ],
       "services": {
