@@ -1,5 +1,7 @@
 keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -list -v -storepass android
 
+https://www.gitbook.com/book/dialmedu/copilar-android-ionic/details --> tutorial ionic
+
 Splas,------------------
 
 package co.edu.udea.compumovil.gr05_20172.lab1;
